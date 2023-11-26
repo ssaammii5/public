@@ -1,0 +1,16 @@
+; Multiply two 16 bit Numbers
+
+
+MOV AX, 04H
+
+
+MOV BX, 02H
+
+
+MUL BX
+
+
+MOV DX, AX
+
+
+HLT

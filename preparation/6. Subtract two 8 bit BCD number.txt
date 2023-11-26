@@ -1,0 +1,11 @@
+; Subtract two 8 bit BCD Number
+
+mov al,00000111B
+mov bl,00000011B
+sub al,bl
+das
+mov cl,al
+mov al,00
+adc al,al
+mov ch,al
+hlt

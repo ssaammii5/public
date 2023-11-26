@@ -1,3 +1,5 @@
+; String Print
+
 .model small
 .stack 100h
 .data
