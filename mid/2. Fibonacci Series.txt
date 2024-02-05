@@ -1,0 +1,16 @@
+; Fibonacci Series
+.model small 
+.code
+  main PROC
+    xor  cx, cx      ; Previous
+    mov  bx, 1       ; Current
+  loopy:
+    lea  dx, [bx+48] ; Make character in DL
+    mov  ah, 02h     ; DOS.PrintChar
+    int  21h
+    xchg bx, cx
+    add  bx, cx
+    cmp  bx, 10
+    jb   loopy
+  ENDP
+end main

@@ -1,0 +1,12 @@
+; Add two 16 bit Numbers
+
+MOV AX,0005h
+MOV BX,0002h
+MOV CX,0000h
+ADD AX,BX
+MOV DX,AX
+JNC jump
+INC CL
+jump:
+MOV [1006h],CL
+HLT
