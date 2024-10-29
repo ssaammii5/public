@@ -1,6 +1,0 @@
-
-MOV AX,3010h
-MOV BX, 2030h
-MUL BX
-
-hlt
