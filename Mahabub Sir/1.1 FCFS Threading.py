@@ -43,6 +43,9 @@ def fcfs_scheduling_threaded():
     for i in range(n):
         print(f"{process_data[i][0]:<8} {process_data[i][2]:<13} {process_data[i][1]:<11} "
               f"{completion_times[i]:<15} {turnaround_times[i]:<15} {waiting_times[i]}")
+    
+    thread_id = threading.get_ident()
+    print(f"Thread ID: {thread_id}\n")
 
 # Create and start the thread
 thread = threading.Thread(target=fcfs_scheduling_threaded)
