@@ -1,0 +1,46 @@
+First-Flore_L3_Switch(config)#int g1/0/23
+First-Flore_L3_Switch(config-if)#ip address 10.10.10.1 255.255.255.252
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int g1/0/24
+First-Flore_L3_Switch(config-if)#ip address 10.10.10.5 255.255.255.252
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#exit
+
+
+
+
+
+Second-Floor_L3_Switch(config)#int g1/0/23
+Second-Floor_L3_Switch(config-if)#ip address 10.10.10.9 255.255.255.252
+Second-Floor_L3_Switch(config-if)#no shut
+Second-Floor_L3_Switch(config-if)#exit
+Second-Floor_L3_Switch(config)#int g1/0/24
+Second-Floor_L3_Switch(config-if)#ip address 10.10.10.13 255.255.255.252
+Second-Floor_L3_Switch(config-if)#no shut
+Second-Floor_L3_Switch(config-if)#exit
+
+
+
+
+
+Third-Floor_L3_Switch(config)#int g1/0/23
+Third-Floor_L3_Switch(config-if)#ip address 10.10.10.17 255.255.255.252
+Third-Floor_L3_Switch(config-if)#no shut
+Third-Floor_L3_Switch(config-if)#exit
+Third-Floor_L3_Switch(config)#int g1/0/24
+Third-Floor_L3_Switch(config-if)#ip address 10.10.10.21 255.255.255.252
+Third-Floor_L3_Switch(config-if)#no shut
+Third-Floor_L3_Switch(config-if)#exit
+
+
+
+
+
+Fourth-Floor_L3_Switch(config)#int g1/0/23
+Fourth-Floor_L3_Switch(config-if)#ip address 10.10.10.25 255.255.255.252
+Fourth-Floor_L3_Switch(config-if)#no shut
+Fourth-Floor_L3_Switch(config-if)#exit
+Fourth-Floor_L3_Switch(config)#int g1/0/24
+Fourth-Floor_L3_Switch(config-if)#ip address 10.10.10.29 255.255.255.252
+Fourth-Floor_L3_Switch(config-if)#exit

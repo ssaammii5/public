@@ -1,0 +1,37 @@
+First-Flore_L3_Switch(config)#int range g1/0/1-6
+First-Flore_L3_Switch(config-if-range)#switchport mode trunk
+First-Flore_L3_Switch(config-if-range)#exit
+First-Flore_L3_Switch(config)#int range g1/0/23-24
+First-Flore_L3_Switch(config-if-range)#no switchport
+First-Flore_L3_Switch(config-if-range)#exit
+
+
+
+
+Second-Floor_L3_Switch(config)#int range g1/0/1-6
+Second-Floor_L3_Switch(config-if-range)#switchport mode trunk
+Second-Floor_L3_Switch(config-if-range)#exit
+Second-Floor_L3_Switch(config)#int range g1/0/23-24
+Second-Floor_L3_Switch(config-if-range)#no switchport
+Second-Floor_L3_Switch(config-if-range)#exit
+
+
+
+
+Third-Floor_L3_Switch(config)#int range g1/0/1-6
+Third-Floor_L3_Switch(config-if-range)#switchport mode trunk
+Third-Floor_L3_Switch(config-if-range)#exit
+Third-Floor_L3_Switch(config)#int range g1/0/23-24
+Third-Floor_L3_Switch(config-if-range)#no switchport
+Third-Floor_L3_Switch(config-if-range)#exit
+
+
+
+
+
+Fourth-Floor_L3_Switch(config)#int range g1/0/1-6
+Fourth-Floor_L3_Switch(config-if-range)#switchport mode trunk
+Fourth-Floor_L3_Switch(config-if-range)#exit
+Fourth-Floor_L3_Switch(config)#int range g1/0/23-24
+Fourth-Floor_L3_Switch(config-if-range)#no switchport
+Fourth-Floor_L3_Switch(config-if-range)#exit

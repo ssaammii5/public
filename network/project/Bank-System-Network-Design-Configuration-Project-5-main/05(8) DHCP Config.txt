@@ -1,0 +1,155 @@
+First-Flore_L3_Switch(config)#vlan 10
+First-Flore_L3_Switch(config-vlan)#vlan 20
+First-Flore_L3_Switch(config-vlan)#vlan 30
+First-Flore_L3_Switch(config-vlan)#vlan 40
+First-Flore_L3_Switch(config-vlan)#vlan 50
+First-Flore_L3_Switch(config-vlan)#vlan 60
+First-Flore_L3_Switch(config-vlan)#exit
+First-Flore_L3_Switch(config)#int vlan 10
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.1 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 20
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.33 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 30
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.65 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 40
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.97 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 50
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.129 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 60
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.161 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+
+
+
+
+
+Second-Floor_L3_Switch(config)#vlan 10
+Second-Floor_L3_Switch(config-vlan)#vlan 20
+Second-Floor_L3_Switch(config-vlan)#vlan 30
+Second-Floor_L3_Switch(config-vlan)#vlan 40
+Second-Floor_L3_Switch(config-vlan)#vlan 50
+Second-Floor_L3_Switch(config-vlan)#vlan 60
+Second-Floor_L3_Switch(config-vlan)#exit
+Second-Floor_L3_Switch(config)#int vlan 10
+Second-Floor_L3_Switch(config-if)#no shut
+Second-Floor_L3_Switch(config-if)#ip address 172.16.0.1 255.255.255.224
+Second-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Second-Floor_L3_Switch(config-if)#exit
+Second-Floor_L3_Switch(config)#int vlan 20
+Second-Floor_L3_Switch(config-if)#no shut
+Second-Floor_L3_Switch(config-if)#ip address 172.16.0.33 255.255.255.224
+Second-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Second-Floor_L3_Switch(config-if)#exit
+Second-Floor_L3_Switch(config)#int vlan 30
+Second-Floor_L3_Switch(config-if)#no shut
+Second-Floor_L3_Switch(config-if)#ip address 172.16.0.65 255.255.255.224
+Second-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Second-Floor_L3_Switch(config-if)#exit
+Second-Floor_L3_Switch(config)#int vlan 40
+Second-Floor_L3_Switch(config-if)#no shut
+Second-Floor_L3_Switch(config-if)#ip address 172.16.0.97 255.255.255.224
+Second-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Second-Floor_L3_Switch(config-if)#exit
+Second-Floor_L3_Switch(config)#int vlan 50
+Second-Floor_L3_Switch(config-if)#no shut
+Second-Floor_L3_Switch(config-if)#ip address 172.16.0.129 255.255.255.224
+Second-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Second-Floor_L3_Switch(config-if)#exit
+Second-Floor_L3_Switch(config)#int vlan 60
+Second-Floor_L3_Switch(config-if)#no shut
+Second-Floor_L3_Switch(config-if)#ip address 172.16.0.161 255.255.255.224
+Second-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Second-Floor_L3_Switch(config-if)#exit
+
+
+
+
+
+
+Third-Floor_L3_Switch(config)#vlan 70
+Third-Floor_L3_Switch(config-vlan)#vlan 80
+Third-Floor_L3_Switch(config-vlan)#vlan 90
+Third-Floor_L3_Switch(config-vlan)#vlan 100
+Third-Floor_L3_Switch(config-vlan)#vlan 110
+Third-Floor_L3_Switch(config-vlan)#vlan 120
+Third-Floor_L3_Switch(config-vlan)#exit
+Third-Floor_L3_Switch(config)#int vlan 70
+Third-Floor_L3_Switch(config-if)#no shut
+Third-Floor_L3_Switch(config-if)#ip address 172.16.0.193 255.255.255.252
+Third-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Third-Floor_L3_Switch(config-if)#exit
+Third-Floor_L3_Switch(config)#int vlan 80
+Third-Floor_L3_Switch(config-if)#no shut
+Third-Floor_L3_Switch(config-if)#ip address 172.16.0.225 255.255.255.224
+Third-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Third-Floor_L3_Switch(config-if)#exit
+Third-Floor_L3_Switch(config)#int vlan 90
+Third-Floor_L3_Switch(config-if)#no shut
+Third-Floor_L3_Switch(config-if)#ip address 172.16.1.1 255.255.255.224
+Third-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Third-Floor_L3_Switch(config-if)#exit
+Third-Floor_L3_Switch(config)#int vlan 100
+Third-Floor_L3_Switch(config-if)#no shut
+Third-Floor_L3_Switch(config-if)#ip address 172.16.1.33 255.255.255.224
+Third-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Third-Floor_L3_Switch(config-if)#exit
+Third-Floor_L3_Switch(config)#int vlan 110
+Third-Floor_L3_Switch(config-if)#no shut
+Third-Floor_L3_Switch(config-if)#ip address 172.16.1.65 255.255.255.224
+Third-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Third-Floor_L3_Switch(config-if)#exit
+Third-Floor_L3_Switch(config)#int vlan 120
+Third-Floor_L3_Switch(config-if)#no shut
+Third-Floor_L3_Switch(config-if)#ip address 172.16.1.97 255.255.255.224
+Third-Floor_L3_Switch(config-if)#exit
+
+
+
+
+
+Fourth-Floor_L3_Switch(config)#int vlan 70
+Fourth-Floor_L3_Switch(config-if)#no shut
+Fourth-Floor_L3_Switch(config-if)#ip address 172.16.0.193 255.255.255.252
+Fourth-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Fourth-Floor_L3_Switch(config-if)#exit
+Fourth-Floor_L3_Switch(config)#int vlan 80
+Fourth-Floor_L3_Switch(config-if)#no shut
+Fourth-Floor_L3_Switch(config-if)#ip address 172.16.0.225 255.255.255.224
+Fourth-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Fourth-Floor_L3_Switch(config-if)#exit
+Fourth-Floor_L3_Switch(config)#int vlan 90
+Fourth-Floor_L3_Switch(config-if)#no shut
+Fourth-Floor_L3_Switch(config-if)#ip address 172.16.1.1 255.255.255.224
+Fourth-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Fourth-Floor_L3_Switch(config-if)#exit
+Fourth-Floor_L3_Switch(config)#int vlan 100
+Fourth-Floor_L3_Switch(config-if)#no shut
+Fourth-Floor_L3_Switch(config-if)#ip address 172.16.1.33 255.255.255.224
+Fourth-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Fourth-Floor_L3_Switch(config-if)#exit
+Fourth-Floor_L3_Switch(config)#int vlan 110
+Fourth-Floor_L3_Switch(config-if)#no shut
+Fourth-Floor_L3_Switch(config-if)#ip address 172.16.1.65 255.255.255.224
+Fourth-Floor_L3_Switch(config-if)#ip helper-address 172.16.1.100
+Fourth-Floor_L3_Switch(config-if)#exit
+Fourth-Floor_L3_Switch(config)#int vlan 120
+Fourth-Floor_L3_Switch(config-if)#no shut
+Fourth-Floor_L3_Switch(config-if)#ip address 172.16.1.97 255.255.255.224
+Fourth-Floor_L3_Switch(config-if)#exit

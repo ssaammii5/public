@@ -1,0 +1,396 @@
+// Router interface ip subnet assign
+
+Router> enable
+Router# config terminal
+Router (config)# int f0/0
+Router (config-if)# ip address 192.168.5.1 255.255.255.0
+Router (config-if)# clock rate 64000
+Router (config-if)# no shutdown
+
+// Saving the config
+Router# copy running-config startup-config
+
+// for serial port
+Router (config)# int s0/0/1
+
+
+// set banner motd
+Router(config)# banner motd 'This is a cisco router'
+
+
+-------------------------------------
+// Router RIP (for passing packet of two different network, two diff router)
+==when connecting between two router with rip, describe what network do they know, note, for both router there will be a common known network
+
+Router(config)# router rip
+Router(config-router)# network 192.168.1.0 ///router knows this network (add both side network similarly)
+
+
+// RIP V2
+Router(config)# router rip
+Router(config-router)# version 2
+Router(config-router)# network 192.168.1.0 ///router knows this network
+
+
+// remove RIP from router
+Router(config)# no router rip
+
+
+//Router EIGRP
+Router(config)# router eigrp 10
+Router(config-router)# network 192.168.20.0 255.255.255.0
+Router(config-router)# network 192.168.20.0 255.255.255.0
+Router(config-router)# ^z //exiting
+Router# copy running-config startup-config
+
+
+//Show Command
+Router# show ip route
+
+Router# show ip route eigrp
+
+Router# show ip eigrp neighbor
+
+Router# show ip ospf int
+
+Router# show ip ospf neigh
+
+Router(config)# do sh ip int br
+
+Router# show ip dhcp pool
+
+
+
+-----------------------------------------
+// OSPF configuration
+
+Router> enable
+Router# config terminal
+Router(config)# hostname R1 // change hostname
+Router(config)# int f0/0
+Router(config-if)# ip add 192.168.12.1 255.255.255.0
+Router(config-if)# no sh
+
+R1(
+
+
+
+
+
+// ospf jamesytech
+Router(config)# router ospf 1
+Router(config-router)# do show ip route
+Router(config-router)# network 10.20.30.0 0.0.0.3 area 0 //here network->ip->wildcard mask(reverse subnet)
+
+
+// easier ospf (to know command can use ?)
+
+Router> en
+Router# conf t
+Router(config)# do show ip route
+Router(config)# int s0/0/0
+Router(config-if)# ip ospf 1 area 0
+
+------------------------------------------------------
+// bgp protocol
+
+Router(config)# router bgp 100
+Router(config-router)# network 198.123.1.0
+Router(config-router)# network 198.123.2.0
+Router(config-router)# neighbor 198.123.2.2 remote-as 200
+Router(config-router)# neighbor 198.123.3.2 remote-as 200
+Router(config-router)# exit
+-----------------------------------------------------------------------
+// Configure SSH
+
+//On Router SSH
+
+Router(config)# ip domain-name admin
+Router(config)# username admin secret cisco
+Router(config)# enable secret cisco
+Router(config)# lin console 0
+Router(config-line)# password class
+Router(config-line)# login
+Router(config-line)# exit
+Router(config)# service password-encryption
+Router(config)# do show run
+Router(config)# crypto key generate rsa //add 1024
+Router(config)# ip ssh version 2
+Router(config)# lin vty 0 15
+Router(config-line)# transport input ssh
+Router(config-line)# login local
+
+//Accessing via pc to ssh of router
+C:\> ssh -l admin 192.168.1.1
+// now after giving password we can control router console
+
+// Switch SSH
+// at first assign ip subnet by opening an interface like int f0/0 then ip add 192........
+
+Switch(config)# enable secret cisco
+Switch(config)# lin con 0
+Switch(config-line)# password cisco
+Switch(config-line)# exit
+Switch(config)# username admin secret cisco
+Switch(config)# service password-encryption
+Switch(config)# ip domain-name admin
+Switch(config)# crypto key generate rsa
+Switch(config)# ip ssh version 2
+Switch(config)# lin vty 0 15
+Switch(config-line)# transport input ssh
+Switch(config-line)# login local
+Switch(config-line)# exit
+Switch(config)# ip default-gateway 192.168.1.1 // to router
+
+
+
+
+-------------------------------------------------------------------
+
+// VLAN Setup
+Switch(config)# vlan 10
+Switch(config-vlan)# name HR
+Switch(config-vlan)# vlan 20
+Switch(config-vlan)# name IT
+Switch(config-vlan)# int fa0/1
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+
+Switch(config-if)# int fa0/2
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 10
+
+Switch(config-if)# int fa0/3
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 20
+
+Switch(config-if)# int fa0/4
+Switch(config-if)# switchport mode access
+Switch(config-if)# switchport access vlan 20
+
+Switch(config-if)# int fa0/5
+Switch(config-if)# switchport mode trunk // this is router
+
+
+
+
+
+/////////// Inter vlan routing
+
+Router> enable
+Router# conf t
+Router(config)# int fa0/0
+Router(config-if)# no shutdown
+
+Router(config-if)# int fa0/0.10
+Router(config-subif)# encapsulation dot1q 10
+Router(config-subif)# ip add 192.168.1.1 255.255.255.0
+
+Router(config-subif)# int fa0/0.20
+Router(config-subif)# encapsulation dot1q 20
+Router(config-subif)# ip add 192.168.2.2 255.255.255.0
+
+
+
+
+//////////////////////some demo from project
+Management_Switch(config)#vlan 10
+Management_Switch(config-vlan)#name Management
+Management_Switch(config-vlan)#int range f0/1-22
+Management_Switch(config-if-range)#switchport access vlan 10
+Management_Switch(config-if-range)#exit
+Management_Switch(config)#int range f0/23-24
+Management_Switch(config-if-range)#switchport mode trunk
+Management_Switch(config-if-range)#exit
+
+
+----------------------------------------------------------------------
+
+
+
+
+///////// Factory Reset
+
+Router> enable
+Router# write erase
+Router# reload
+Router# show running-config
+
+
+///////// Switch Reset
+
+Switch> enable
+Switch# write erase
+Switch# delete flash:vlan.dat
+Switch# reload
+Switch# show vlan
+
+
+-----------------------------------------------------------------
+****//dhcp setup in router
+
+Router(config)# int f0/0
+Router(config-if)# ip add 192.168.1.1 255.255.255.0
+Router(config-if)# no shutdown
+
+Router(config-if)# int f0/1
+Router(config-if)# ip add 192.168.2.1 255.255.255.0
+Router(config-if)# no shutdown
+
+// now in router
+Router(config)# ip dhcp excluded-address 192.168.1.1
+Router(config)# ip dhcp excluded-address 192.168.2.1
+
+Router(config)# ip dhcp pool 192.168.1.1
+Router(dhcp-config)# network 192.168.1.0 255.255.255.0
+Router(dhcp-config)# default-router 192.168.1.1
+Router(dhcp-config)# dns-server 8.8.8.8
+Router(dhcp-config)# exit
+
+Router(config)# ip dhcp pool 192.168.2.1
+Router(dhcp-config)# network 192.168.2.0 255.255.255.0
+Router(dhcp-config)# default-router 192.168.2.1
+Router(dhcp-config)# dns-server 8.8.8.8
+Router(dhcp-config)# exit
+
+Router# show ip dhcp pool
+
+// for vlan
+Router(config)# ip dhcp pool Vlan60
+
+
+// using dhcp server dragging
+// after configuring via GUI in dhcp inside the router 
+
+Router(config)# int g0/0
+Router(config-if)# ip helper-address 192.168.1.10 //this is the server address
+Router(config-if)# exit
+
+------------------------------------------------------------------
+// static routing
+
+Router(config)# ip route 192.168.3.0 255.55.255.0 192.168.1.4  // network->subnet->nexthop
+
+
+
+--------------------
+
+/////////////////demo code from project
+
+//vlan
+Management_Switch(config)#vlan 10
+Management_Switch(config-vlan)#name Management
+Management_Switch(config-vlan)#int range f0/1-22
+Management_Switch(config-if-range)#switchport access vlan 10
+Management_Switch(config-if-range)#exit
+Management_Switch(config)#int range f0/23-24
+Management_Switch(config-if-range)#switchport mode trunk
+Management_Switch(config-if-range)#exit
+
+//port security
+
+Management_Switch(config)#int range f0/1-22
+Management_Switch(config-if-range)#switchport mode access
+Management_Switch(config-if-range)#switchport port-security
+Management_Switch(config-if-range)#switchport port-security maximum 19
+Management_Switch(config-if-range)#switchport port-security mac-address sticky
+Management_Switch(config-if-range)#switchport port-security violation shutdown
+
+
+//router password
+First-Floor_Router(config)#line console 0
+First-Floor_Router(config-line)#password First-Floor_Router
+First-Floor_Router(config-line)#login
+First-Floor_Router(config-line)#exit
+First-Floor_Router(config)#enable secret 10.10.10.33
+First-Floor_Router(config)#no ip domain-lookup
+First-Floor_Router(config)#exit
+
+//ssh 
+First-Floor_Router#conf t
+First-Floor_Router(config)#ip domain name First-Floor_Router
+First-Floor_Router(config)#crypto key generate rsa
+How many bits in the modulus [512]: 500
+First-Floor_Router(config)#line vty 0
+First-Floor_Router(config-line)#transport input ssh
+First-Floor_Router(config-line)#login local
+First-Floor_Router(config-line)#username First-Floor_Router password 10.10.10.37
+
+//layer 2 password
+Management_Switch(config)#line console 0
+Management_Switch(config-line)#password First-Floor
+Management_Switch(config-line)#login
+Management_Switch(config-line)#exit
+Management_Switch(config)#enable secret 172.16.0.0\27
+Management_Switch(config)#line vty 0
+Management_Switch(config-line)#password Management
+Management_Switch(config-line)#login
+Management_Switch(config-line)#exit
+Management_Switch(config)#no ip domain-lookup
+Management_Switch(config)#exit
+Management_Switch#wr
+
+
+//ospf
+
+First-Flore_L3_Switch(config)#ip routing
+First-Flore_L3_Switch(config)#router ospf 10
+First-Flore_L3_Switch(config-router)#network 10.10.10.0 0.0.0.3 area 0
+First-Flore_L3_Switch(config-router)#network 10.10.10.4 0.0.0.3 area 0
+First-Flore_L3_Switch(config-router)#network 172.16.0.0 0.0.0.31 area 0
+First-Flore_L3_Switch(config-router)#network 172.16.0.32 0.0.0.31 area 0
+First-Flore_L3_Switch(config-router)#network 172.16.0.64 0.0.0.31 area 0
+First-Flore_L3_Switch(config-router)#network 172.16.0.96 0.0.0.31 area 0
+First-Flore_L3_Switch(config-router)#network 172.16.0.128 0.0.0.31 area 0
+First-Flore_L3_Switch(config-router)#network 172.16.0.160 0.0.0.31 area 0
+First-Flore_L3_Switch(config-router)#exit
+
+
+//dhcp config
+
+First-Flore_L3_Switch(config)#vlan 10
+First-Flore_L3_Switch(config-vlan)#vlan 20
+First-Flore_L3_Switch(config-vlan)#vlan 30
+First-Flore_L3_Switch(config-vlan)#vlan 40
+First-Flore_L3_Switch(config-vlan)#vlan 50
+First-Flore_L3_Switch(config-vlan)#vlan 60
+First-Flore_L3_Switch(config-vlan)#exit
+First-Flore_L3_Switch(config)#int vlan 10
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.1 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 20
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.33 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 30
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.65 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 40
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.97 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 50
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.129 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+First-Flore_L3_Switch(config)#int vlan 60
+First-Flore_L3_Switch(config-if)#no shut
+First-Flore_L3_Switch(config-if)#ip address 172.16.0.161 255.255.255.224
+First-Flore_L3_Switch(config-if)#ip helper-address 172.16.1.100
+First-Flore_L3_Switch(config-if)#exit
+
+
+
+//banner
+Accounting_Switch(config)# banner motd #
+execution mode password Second-Floor
+Privilege mode password 172.16.0.128\27
+line vty password Accounting
+#

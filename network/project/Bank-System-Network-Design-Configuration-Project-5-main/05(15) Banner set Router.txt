@@ -1,0 +1,35 @@
+First-Floor_Router(config)#banner motd #
+Execution mode password: First-Floor_Router
+Privilege mode password: 10.10.10.33
+ssh Username: First-Floor_Router Password: 10.10.10.37
+#
+
+
+
+
+
+Second-Floor_Router(config)#banner motd #
+execution mode password: Second-Floor_Router
+Privilege mode password: 10.10.10.38
+ssh Username: Second-Floor_Router Password: 10.10.10.41
+#
+
+
+
+
+
+Third-Floor_Router(config)#banner motd #
+execution mode password: Third-Floor_Router
+Privilege mode password: 10.10.10.45
+ssh Username: Third-Floor_Router Password: 10.10.10.34
+#
+
+
+
+
+
+Fourth-Floor_Router(config)#banner motd #
+execution mode password: Fourth-Floor_Router
+Privilege mode password: 10.10.10.42
+ssh Username: Fourth-Floor_Router Password: 10.10.10.46
+#

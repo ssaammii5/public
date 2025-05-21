@@ -1,0 +1,41 @@
+BMW Company Ltd. is a Germany owned company that deals with Banking and Insurance. The company is intending to expand its services across the Asia continent having the first branch to be located in Nodia, INDIA.
+The company has secured a four-story building to operate within the Noda city. Therefore, the company would like to allow sourcing the knowledge from a group of final-year students from the local university to design
+and implement their company network. Assume you are among the students to take over this role, carefully read down the requirements then model the design and implement the network based on the company's needs.
+Each floor has departments as provided in the table below.;
+
+a) Use any of the following network simulation software to implement the above topology.
+- Simulation software: Cisco Packet tracer or GNS3 for design and implementation.
+b) Use OSPF as the routing protocol to advertise routes.
+c) Each department is required to have a wireless network for the users.
+d) Each department except the server room will be anticipated to have around 60 users both wired and wireless users.
+e) Host devices in the network are required to obtain IPv4 addresses automatically.
+f) Devices in all the departments are required to communicate with each other.
+g) Create HTTP, and E-mail servers.
+h) All devices in the network are expected to obtain an IP address dynamically from the dedicated DHCP servers located at the server room.
+i) Configure SSH in all the routers for remote login.
+j) Configure the basic configuration of the devices: Hostnames, Line Console and Enable passwords, Banner messages Disable domain IP lookup, encrypt all configured passwords.
+k) Each department should be in a different VLAN and subnetwork; VLANs you will use in your case, e.g. 10, 20, 30… etc..
+l) Planning of IP Addresses: You have been given 172.16.0.0 as the base address for this network. Do subnetting based on the number of hosts in every department as provided above. Identify subnet mask, useable IP address range, and broadcast address for each subnet.
+m) End Device Configurations: Configure all the end devices in the network with the appropriate IP address based on the calculations above.
+n) Configure port-security: Use sticky command to obtain MAC Address and Violation mode of the shutdown.
+o) Test and Verifying Network Communication.
+
+
+
+Technologies Implemented
+
+
+1. Creating a network topology using Cisco Packet Tracer.
+2. Hierarchical Network Design.
+3. Connecting Networking devices with Correct cabling.
+4. Configuring Basic device settings.
+5. Creating VLANs and assigning ports VLAN numbers.
+6. Subnetting and IP Addressing.
+7. Configuring Inter-VLAN Routing on the Multilayer (Switch Virtual Interface).
+8. Configuring Dedicated DHCP Server device to provide dynamic IP allocation.
+9. Configuring SSH for secure Remote access.
+10. Configuring OSPF as the routing protocol.
+11. Configuring switchport security or Port-Security on the switches.
+12. Configuring WLAN or wireless network (Cisco Access Point).
+13. Host Device Configurations.
+14. Test and Verifying Network Communication.

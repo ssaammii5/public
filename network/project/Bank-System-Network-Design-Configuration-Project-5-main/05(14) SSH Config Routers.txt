@@ -1,0 +1,47 @@
+First-Floor_Router#conf t
+First-Floor_Router(config)#ip domain name First-Floor_Router
+First-Floor_Router(config)#crypto key generate rsa
+How many bits in the modulus [512]: 500
+First-Floor_Router(config)#line vty 0
+First-Floor_Router(config-line)#transport input ssh
+First-Floor_Router(config-line)#login local
+First-Floor_Router(config-line)#username First-Floor_Router password 10.10.10.37
+
+
+
+
+
+Second-Floor_Router#conf t
+Second-Floor_Router(config)#ip domain name Second-Floor_Router
+Second-Floor_Router(config)#crypto key generate rsa
+How many bits in the modulus [512]: 600
+Second-Floor_Router(config)#line vty 0
+Second-Floor_Router(config-line)#transport input ssh
+Second-Floor_Router(config-line)#login local
+Second-Floor_Router(config-line)#username Second-Floor_Router password 10.10.10.41
+
+
+
+
+
+Third-Floor_Router#conf t
+Third-Floor_Router(config)#ip domain name Third-Floor_Router
+Third-Floor_Router(config)#crypto key generate rsa
+How many bits in the modulus [512]: 700
+Third-Floor_Router(config)#line vty 0
+Third-Floor_Router(config-line)#transport input ssh	
+Third-Floor_Router(config-line)#login local
+Third-Floor_Router(config-line)#username Third-Floor_Router password 10.10.10.34
+
+
+
+
+
+Fourth-Floor_Router#conf t
+Fourth-Floor_Router(config)#ip domain name Fourth-Floor_Router
+Fourth-Floor_Router(config)#crypto key generate rsa
+How many bits in the modulus [512]: 800
+Fourth-Floor_Router(config)#line vty 0
+Fourth-Floor_Router(config-line)#transport input ssh
+Fourth-Floor_Router(config-line)#login local
+Fourth-Floor_Router(config-line)#username Fourth-Floor_Router password 10.10.10.46

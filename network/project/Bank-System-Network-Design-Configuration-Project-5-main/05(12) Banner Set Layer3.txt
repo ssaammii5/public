@@ -1,0 +1,39 @@
+First-Flore_L3_Switch(config)#banner motd #
+Enter TEXT message.  End with the character '#'.
+Execution mode password: First-Floor-Layer3_switch
+Privilege mode password: 10.10.10.1/30
+line vty password: 10.10.10.1/30_First-Floor-Layer3_switch
+#
+
+
+
+
+
+Second-Floor_L3_Switch(config)#banner motd #
+Enter TEXT message.  End with the character '#'.
+execution mode password: Second-Floor-Layer3_switch
+Privilege mode password: 10.10.10.9/30
+line vty password: 10.10.10.9/30_Second-Floor-Layer3_switch
+#
+
+
+
+
+
+Third-Floor_L3_Switch(config)#banner motd #
+Enter TEXT message.  End with the character '#'.
+execution mode password: Third-Floor-Layer3_switch
+Privilege mode password: 10.10.10.17/30
+line vty password: 10.10.10.17/30_Third-Floor-Layer3_switch
+#
+
+
+
+
+
+Fourth-Floor_L3_Switch(config)#banner motd #
+Enter TEXT message.  End with the character '#'.
+execution mode password: Fourth-Floor-Layer3_switch
+Privilege mode password: 10.10.10.25/30
+line vty password: 10.10.10.25/30_Fourth-Floor-Layer3_switch
+#
