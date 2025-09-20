@@ -1,0 +1,30 @@
+// Draw Circle Using Polar Coordinates
+
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void PolarCircle(int xc, int yc, int r) {
+    const double PI = acos(-1);
+    for (double theta = 0; theta < 2 * PI; theta += 1.0 / r) {
+        int x = xc + (int)(r * cos(theta));
+        int y = yc + (int)(r * sin(theta));
+        putpixel(x, y, WHITE);
+        delay(10);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    int xc, yc, r;
+    cout << "Enter center xc yc: ";
+    cin >> xc >> yc;
+    cout << "Enter radius r: ";
+    cin >> r;
+    PolarCircle(xc, yc, r);
+    getch();
+    closegraph();
+    return 0;
+}

@@ -1,0 +1,70 @@
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+void drawPoly(int x[], int y[], int n, int ox, int oy, int color) {
+    setcolor(color);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + x[i], oy - y[i], ox + x[j], oy - y[j]);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm; initgraph(&gd, &gm, "");
+    int w = getmaxx(), h = getmaxy(), ox = w/2, oy = h/2;
+    int n; cout << "Enter number of vertices: "; cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+    double targetAngle; cout << "Enter rotation angle (deg): "; cin >> targetAngle;
+    int tx, ty; cout << "Enter translation vector (tx ty): "; cin >> tx >> ty;
+
+    // Compute centroid
+    double cx=0, cy=0;
+    for (int i = 0; i < n; ++i) { cx += x[i]; cy += y[i]; }
+    cx /= n; cy /= n;
+
+    const int steps = 60;
+    // Phase 1: Rotate
+    for (int s = 1; s <= steps; ++s) {
+        double a = targetAngle * s / steps * M_PI/180.0;
+        int rx[20], ry[20];
+        for (int i = 0; i < n; ++i) {
+            double dx = x[i]-cx, dy = y[i]-cy;
+            double nx = dx*cos(a) - dy*sin(a) + cx;
+            double ny = dx*sin(a) + dy*cos(a) + cy;
+            rx[i] = (int)round(nx); ry[i] = (int)round(ny);
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(rx, ry, n, ox, oy, YELLOW);
+        delay(50);
+    }
+    // Cache rotated
+    int rxF[20], ryF[20];
+    for (int i = 0; i < n; ++i) {
+        double dx = x[i]-cx, dy = y[i]-cy;
+        double nx = dx*cos(targetAngle*M_PI/180.0) - dy*sin(targetAngle*M_PI/180.0) + cx;
+        double ny = dx*sin(targetAngle*M_PI/180.0) + dy*cos(targetAngle*M_PI/180.0) + cy;
+        rxF[i] = (int)round(nx); ryF[i] = (int)round(ny);
+    }
+    // Phase 2: Translate
+    for (int s = 0; s <= steps; ++s) {
+        double t = (double)s/steps;
+        int fx[20], fy[20];
+        for (int i = 0; i < n; ++i) {
+            fx[i] = rxF[i] + (int)round(tx*t);
+            fy[i] = ryF[i] + (int)round(ty*t);
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(fx, fy, n, ox, oy, YELLOW);
+        delay(50);
+    }
+    getch(); closegraph(); return 0;
+}

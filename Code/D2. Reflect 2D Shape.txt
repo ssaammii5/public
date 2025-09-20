@@ -1,0 +1,72 @@
+// Pure 2D Shape Reflection with Center-Based Input
+#include <graphics.h>
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int w = getmaxx();
+    int h = getmaxy();
+    int ox = w / 2;    // center X
+    int oy = h / 2;    // center Y
+
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+
+    cout << "Choose reflection axis:\n"
+         << "1: X-axis\n"
+         << "2: Y-axis\n";
+    int axis;
+    cin >> axis;
+
+    int rx[20], ry[20];
+    for (int i = 0; i < n; ++i) {
+        if (axis == 1) {        // reflect across X-axis
+            rx[i] =  x[i];
+            ry[i] = -y[i];
+        } else if (axis == 2) { // reflect across Y-axis
+            rx[i] = -x[i];
+            ry[i] =  y[i];
+        } else {
+            cout << "Invalid axis choice.\n";
+            getch();
+            closegraph();
+            return 1;
+        }
+    }
+
+    // draw original shape in WHITE
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int x1 = ox +  x[i];
+        int y1 = oy -  y[i];
+        int x2 = ox +  x[j];
+        int y2 = oy -  y[j];
+        line(x1, y1, x2, y2);
+    }
+
+    // draw reflected shape in YELLOW
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int x1 = ox + rx[i];
+        int y1 = oy - ry[i];
+        int x2 = ox + rx[j];
+        int y2 = oy - ry[j];
+        line(x1, y1, x2, y2);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

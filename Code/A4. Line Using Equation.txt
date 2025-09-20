@@ -1,0 +1,51 @@
+// Draw Line Using ax*x + b*y + c = 0
+
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void DrawLineEquation(int a, int b, int c) {
+    int xmax = getmaxx();
+    int ymax = getmaxy();
+    if (b == 0 && a != 0) {
+        // Vertical line x = -c/a
+        int x0 = (int)(-c / (double)a);
+        if (x0 >= 0 && x0 <= xmax) {
+            for (int y = 0; y <= ymax; ++y) {
+                putpixel(x0, y, WHITE);
+                delay(10);
+            }
+        }
+    } else if (a == 0 && b != 0) {
+        // Horizontal line y = -c/b
+        int y0 = (int)(-c / (double)b);
+        if (y0 >= 0 && y0 <= ymax) {
+            for (int x = 0; x <= xmax; ++x) {
+                putpixel(x, y0, WHITE);
+                delay(10);
+            }
+        }
+    } else if (a != 0 && b != 0) {
+        for (int x = 0; x <= xmax; ++x) {
+            double yd = (-a * x - c) / (double)b;
+            int y = (int)yd;
+            if (y >= 0 && y <= ymax) {
+                putpixel(x, y, WHITE);
+                delay(10);
+            }
+        }
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    int a, b, c;
+    cout << "Enter coefficients a, b, c: ";
+    cin >> a >> b >> c;
+    DrawLineEquation(a, b, c);
+    getch();
+    closegraph();
+    return 0;
+}

@@ -1,0 +1,73 @@
+// 2D Shape Scaling about Centroid (Centered in Window)
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y): ";
+        cin >> x[i] >> y[i];
+    }
+
+    double sxFactor, syFactor;
+    cout << "Enter scaling factors (sx sy): ";
+    cin >> sxFactor >> syFactor;
+
+    // Compute centroid of the polygon
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += x[i];
+        cy += y[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    // Screen center
+    int px = getmaxx() / 2;
+    int py = getmaxy() / 2;
+
+    // Compute scaled vertices
+    int rx[20], ry[20];
+    for (int i = 0; i < n; ++i) {
+        // Translate to centroid
+        double tx = x[i] - cx;
+        double ty = y[i] - cy;
+        // Scale
+        double sx = tx * sxFactor;
+        double sy = ty * syFactor;
+        // Translate to screen center
+        rx[i] = (int)(sx + px);
+        ry[i] = (int)(sy + py);
+    }
+
+    // Draw original shape in WHITE (also centered)
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int ox1 = (int)(x[i] - cx + px);
+        int oy1 = (int)(y[i] - cy + py);
+        int ox2 = (int)(x[j] - cx + px);
+        int oy2 = (int)(y[j] - cy + py);
+        line(ox1, oy1, ox2, oy2);
+    }
+
+    // Draw scaled shape in YELLOW
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(rx[i], ry[i], rx[j], ry[j]);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

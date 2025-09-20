@@ -1,0 +1,58 @@
+// 2D Shape Translation with Center-Based Input
+#include <graphics.h>
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int w = getmaxx(), h = getmaxy();
+    int ox = w / 2, oy = h / 2;  // window center as origin
+
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+
+    int tx, ty;
+    cout << "Enter translation vector (tx ty): ";
+    cin >> tx >> ty;
+
+    int rx[20], ry[20];
+    for (int i = 0; i < n; ++i) {
+        rx[i] = x[i] + tx;
+        ry[i] = y[i] + ty;
+    }
+
+    // Draw original shape in WHITE
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int x1 = ox +  x[i];
+        int y1 = oy -  y[i];
+        int x2 = ox +  x[j];
+        int y2 = oy -  y[j];
+        line(x1, y1, x2, y2);
+    }
+
+    // Draw translated shape in YELLOW
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int x1 = ox + rx[i];
+        int y1 = oy - ry[i];
+        int x2 = ox + rx[j];
+        int y2 = oy - ry[j];
+        line(x1, y1, x2, y2);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

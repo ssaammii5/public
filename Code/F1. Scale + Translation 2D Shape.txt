@@ -1,0 +1,75 @@
+// 2D Shape: Scaling then Translation
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    // Window center as origin
+    int w = getmaxx(), h = getmaxy();
+    int ox = w/2, oy = h/2;
+
+    // Read polygon vertices (relative to center)
+    int n;
+    cout << "Enter number of vertices: ";
+    cin  >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y) relative to center: ";
+        cin  >> x[i] >> y[i];
+    }
+
+    // Read scaling factors and translation vector
+    double sxFactor, syFactor;
+    cout << "Enter scaling factors (sx sy): ";
+    cin  >> sxFactor >> syFactor;
+    int tx, ty;
+    cout << "Enter translation vector (tx ty): ";
+    cin  >> tx >> ty;
+
+    // Compute centroid of the original polygon
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += x[i];
+        cy += y[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    // Apply scaling about centroid, then translation
+    int fx[20], fy[20];
+    for (int i = 0; i < n; ++i) {
+        double dx = x[i] - cx;
+        double dy = y[i] - cy;
+        double sx = dx * sxFactor;
+        double sy = dy * syFactor;
+        double scaledX = sx + cx;
+        double scaledY = sy + cy;
+        fx[i] = (int)(scaledX + tx);
+        fy[i] = (int)(scaledY + ty);
+    }
+
+    // Draw original shape in WHITE
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox +  x[i], oy -  y[i],
+             ox +  x[j], oy -  y[j]);
+    }
+
+    // Draw transformed shape in YELLOW
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + fx[i], oy - fy[i],
+             ox + fx[j], oy - fy[j]);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

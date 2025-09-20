@@ -1,0 +1,104 @@
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+void drawPoly(int x[], int y[], int n, int ox, int oy, int color) {
+    setcolor(color);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + x[i], oy - y[i], ox + x[j], oy - y[j]);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int w = getmaxx(), h = getmaxy();
+    int ox = w / 2, oy = h / 2;
+
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+
+    double sxFactor, syFactor, angle;
+    cout << "Enter scaling factors (sx sy): ";
+    cin >> sxFactor >> syFactor;
+    cout << "Enter rotation angle in degrees: ";
+    cin >> angle;
+    double radTarget = angle * acos(-1) / 180.0;
+
+    // Compute centroid
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += x[i];
+        cy += y[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    const int steps = 60;
+
+    // Phase 1: animate scaling
+    for (int s = 0; s <= steps; ++s) {
+        double t = (double)s / steps;
+        double curSX = 1 + (sxFactor - 1) * t;
+        double curSY = 1 + (syFactor - 1) * t;
+        int fx[20], fy[20];
+        for (int i = 0; i < n; ++i) {
+            double dx = x[i] - cx;
+            double dy = y[i] - cy;
+            double sx = dx * curSX;
+            double sy = dy * curSY;
+            double fx_d = sx + cx;
+            double fy_d = sy + cy;
+            fx[i] = int(fx_d + (fx_d > 0 ? 0.5 : -0.5));
+            fy[i] = int(fy_d + (fy_d > 0 ? 0.5 : -0.5));
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(fx, fy, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    // Store fully scaled coordinates
+    double sxFull[20], syFull[20];
+    for (int i = 0; i < n; ++i) {
+        double dx = x[i] - cx;
+        double dy = y[i] - cy;
+        sxFull[i] = dx * sxFactor + cx;
+        syFull[i] = dy * syFactor + cy;
+    }
+
+    // Phase 2: animate rotation
+    for (int s = 0; s <= steps; ++s) {
+        double t = (double)s / steps;
+        double curRad = radTarget * t;
+        int fx[20], fy[20];
+        for (int i = 0; i < n; ++i) {
+            double tx = sxFull[i] - cx;
+            double ty = syFull[i] - cy;
+            double rx = tx * cos(curRad) - ty * sin(curRad);
+            double ry = tx * sin(curRad) + ty * cos(curRad);
+            double fx_d = rx + cx;
+            double fy_d = ry + cy;
+            fx[i] = int(fx_d + (fx_d > 0 ? 0.5 : -0.5));
+            fy[i] = int(fy_d + (fy_d > 0 ? 0.5 : -0.5));
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(fx, fy, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

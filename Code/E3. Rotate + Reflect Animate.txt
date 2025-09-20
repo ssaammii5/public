@@ -1,0 +1,96 @@
+// 2D Shape: Animated Rotate then Reflect
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+void drawPolygon(int *x, int *y, int n, int ox, int oy, int color) {
+    setcolor(color);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + x[i], oy - y[i], ox + x[j], oy - y[j]);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    int w = getmaxx(), h = getmaxy();
+    int ox = w/2, oy = h/2;
+
+    // Input polygon
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Vertex " << i << " (x y): ";
+        cin >> x[i] >> y[i];
+    }
+
+    // Input animation parameters
+    double targetAngle;
+    cout << "Enter total rotation angle (deg): ";
+    cin >> targetAngle;
+    cout << "Reflection axis (1=X, 2=Y): ";
+    int axis;
+    cin >> axis;
+
+    // Compute centroid
+    double cx=0, cy=0;
+    for (int i=0; i<n; ++i) { cx+=x[i]; cy+=y[i]; }
+    cx/=n; cy/=n;
+
+    // Animation 1: rotation in steps
+    int steps = 60;
+    for (int s=1; s<=steps; ++s) {
+        double angle = targetAngle * s / steps * M_PI/180.0;
+        int rx[20], ry[20];
+        // rotate about centroid
+        for (int i=0; i<n; ++i) {
+            double dx = x[i] - cx, dy = y[i] - cy;
+            double nx = dx*cos(angle) - dy*sin(angle);
+            double ny = dx*sin(angle) + dy*cos(angle);
+            rx[i] = (int)(nx + cx);
+            ry[i] = (int)(ny + cy);
+        }
+        cleardevice();
+        drawPolygon(x, y, n, ox, oy, WHITE);
+        drawPolygon(rx, ry, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    // Capture fully rotated coords
+    int rx_full[20], ry_full[20];
+    for (int i=0; i<n; ++i) {
+        double dx = x[i]-cx, dy = y[i]-cy;
+        double nx = dx*cos(targetAngle*M_PI/180.0) - dy*sin(targetAngle*M_PI/180.0);
+        double ny = dx*sin(targetAngle*M_PI/180.0) + dy*cos(targetAngle*M_PI/180.0);
+        rx_full[i] = (int)(nx + cx);
+        ry_full[i] = (int)(ny + cy);
+    }
+
+    // Animation 2: reflection “flip”
+    for (int s=0; s<=steps; ++s) {
+        double f = 1.0 - 2.0 * s / steps;  // goes from +1 to –1
+        int fx[20], fy[20];
+        for (int i=0; i<n; ++i) {
+            if (axis==1) {       // X-axis: invert y
+                fx[i] = rx_full[i];
+                fy[i] = (int)(ry_full[i] * f);
+            } else {             // Y-axis: invert x
+                fx[i] = (int)(rx_full[i] * f);
+                fy[i] = ry_full[i];
+            }
+        }
+        cleardevice();
+        drawPolygon(x, y, n, ox, oy, WHITE);
+        drawPolygon(fx, fy, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

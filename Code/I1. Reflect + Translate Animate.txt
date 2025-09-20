@@ -1,0 +1,62 @@
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+void drawPoly(int x[], int y[], int n, int ox, int oy, int color) {
+    setcolor(color);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + x[i], oy - y[i], ox + x[j], oy - y[j]);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm; initgraph(&gd, &gm, "");
+    int w = getmaxx(), h = getmaxy(), ox = w/2, oy = h/2;
+    int n; cout << "Enter number of vertices: "; cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+    cout << "Reflection axis (1=X, 2=Y): ";
+    int axis; cin >> axis;
+    int tx, ty; cout << "Enter translation vector (tx ty): "; cin >> tx >> ty;
+
+    const int steps = 60;
+    // Phase 1: Reflect
+    for (int s = 0; s <= steps; ++s) {
+        double f = 1.0 - 2.0 * s / steps;
+        int fx[20], fy[20];
+        for (int i = 0; i < n; ++i) {
+            if (axis == 1) { fx[i] = x[i]; fy[i] = (int)round(y[i]*f); }
+            else          { fx[i] = (int)round(x[i]*f); fy[i] = y[i];     }
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(fx, fy, n, ox, oy, YELLOW);
+        delay(50);
+    }
+    // Cache reflected
+    int rxF[20], ryF[20];
+    for (int i = 0; i < n; ++i) {
+        if (axis == 1) { rxF[i] = x[i]; ryF[i] = -y[i]; }
+        else           { rxF[i] = -x[i]; ryF[i] = y[i]; }
+    }
+    // Phase 2: Translate
+    for (int s = 0; s <= steps; ++s) {
+        double t = (double)s/steps;
+        int txc[20], tyc[20];
+        for (int i = 0; i < n; ++i) {
+            txc[i] = rxF[i] + (int)round(tx*t);
+            tyc[i] = ryF[i] + (int)round(ty*t);
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(txc, tyc, n, ox, oy, YELLOW);
+        delay(50);
+    }
+    getch(); closegraph(); return 0;
+}

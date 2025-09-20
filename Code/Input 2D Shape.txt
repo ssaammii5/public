@@ -1,0 +1,51 @@
+Triangle
+Enter number of vertices: 3
+Enter vertex 0 (x y): 0 0
+Enter vertex 1 (x y): 100 0
+Enter vertex 2 (x y): 50 75
+
+Square 
+Enter number of vertices: 4
+Enter vertex 0 (x y): 50 50
+Enter vertex 1 (x y): 150 50
+Enter vertex 2 (x y): 150 150
+Enter vertex 3 (x y): 50 150
+
+Pentagon 
+Enter number of vertices: 5
+Enter vertex 0 (x y): 0 100
+Enter vertex 1 (x y): -95 31
+Enter vertex 2 (x y): -59 -81
+Enter vertex 3 (x y): 59 -81
+Enter vertex 4 (x y): 95 31
+
+
+For Translation:
+(–50, 75): shifts left 50 px and up 75 px
+(200, 0): shifts right 200 px with no vertical move
+(0, –100): shifts down 100 px with no horizontal move
+
+
+
+
+For Scaling Factor:
+2.0 2.0
+Uniformly doubles the size of the shape.
+
+0.5 0.5
+Shrinks the shape to half its width and height.
+
+1.5 0.75
+Stretches horizontally by 50% and compresses vertically by 25%.
+
+2.0 1.0
+Doubles width only.
+
+1.0 2.0
+Doubles height only.
+
+–1.0 1.0
+Reflects across the y-axis and keeps height unchanged.
+
+1.0 –1.0
+Reflects across the x-axis and keeps width unchanged.

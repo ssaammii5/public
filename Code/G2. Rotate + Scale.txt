@@ -1,0 +1,86 @@
+// Rotate then Scale
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    // Window center as origin
+    int width = getmaxx(), height = getmaxy();
+    int ox = width / 2, oy = height / 2;
+
+    // Read polygon vertices (relative to center)
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    double x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+
+    // Read rotation angle and scaling factors
+    double angle, sxFactor, syFactor;
+    cout << "Enter rotation angle in degrees: ";
+    cin >> angle;
+    cout << "Enter scaling factors (sx sy): ";
+    cin >> sxFactor >> syFactor;
+    double rad = angle * acos(-1) / 180.0;
+
+    // Compute centroid of the original polygon
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += x[i];
+        cy += y[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    // Apply rotation about centroid, then scaling about centroid
+    int fx[20], fy[20];
+    for (int i = 0; i < n; ++i) {
+        // Translate to centroid
+        double tx = x[i] - cx;
+        double ty = y[i] - cy;
+
+        // Step 1: Rotate
+        double rx = tx * cos(rad) - ty * sin(rad);
+        double ry = tx * sin(rad) + ty * cos(rad);
+        double rotX = rx + cx;
+        double rotY = ry + cy;
+
+        // Step 2: Scale
+        double sx = (rotX - cx) * sxFactor;
+        double sy = (rotY - cy) * syFactor;
+        double finalX = sx + cx;
+        double finalY = sy + cy;
+
+        // Convert to screen coordinates
+        fx[i] = int(ox + finalX);
+        fy[i] = int(oy - finalY);
+    }
+
+    // Draw original shape in WHITE
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + int(x[i]), oy - int(y[i]),
+             ox + int(x[j]), oy - int(y[j]));
+    }
+
+    // Draw transformed shape in YELLOW
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(fx[i], fy[i],
+             fx[j], fy[j]);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

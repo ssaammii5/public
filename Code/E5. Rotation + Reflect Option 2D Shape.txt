@@ -1,0 +1,115 @@
+// 2D Shape Rotation and Reflection with Center-Based Input
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int w = getmaxx(), h = getmaxy();
+    int ox = w / 2, oy = h / 2;  // window center as origin
+
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y): ";
+        cin >> x[i] >> y[i];
+    }
+
+    cout << "Choose transformation:\n"
+         << "1: Rotation\n"
+         << "2: Reflection\n";
+    int choice;
+    cin >> choice;
+
+    int rx[20], ry[20];
+
+    if (choice == 1) {
+        const double PI = acos(-1);
+        double angle;
+        cout << "Enter rotation angle in degrees: ";
+        cin >> angle;
+        double rad = angle * PI / 180.0;
+
+        // compute centroid of the shape (relative coordinates)
+        double cx = 0, cy = 0;
+        for (int i = 0; i < n; ++i) {
+            cx += x[i];
+            cy += y[i];
+        }
+        cx /= n;
+        cy /= n;
+
+        // rotate each point about centroid
+        for (int i = 0; i < n; ++i) {
+            double tx = x[i] - cx;
+            double ty = y[i] - cy;
+            double rnx = tx * cos(rad) - ty * sin(rad);
+            double rny = tx * sin(rad) + ty * cos(rad);
+            rx[i] = (int)(rnx + cx);
+            ry[i] = (int)(rny + cy);
+        }
+    }
+    else if (choice == 2) {
+        cout << "Choose reflection axis:\n"
+             << "1: X-axis\n"
+             << "2: Y-axis\n";
+        int axis;
+        cin >> axis;
+
+        // reflect each point about chosen axis
+        for (int i = 0; i < n; ++i) {
+            if (axis == 1) {        // X-axis
+                rx[i] =  x[i];
+                ry[i] = -y[i];
+            }
+            else if (axis == 2) {   // Y-axis
+                rx[i] = -x[i];
+                ry[i] =  y[i];
+            }
+            else {
+                cout << "Invalid axis choice.\n";
+                getch();
+                closegraph();
+                return 1;
+            }
+        }
+    }
+    else {
+        cout << "Invalid transformation choice.\n";
+        getch();
+        closegraph();
+        return 1;
+    }
+
+    // draw original shape in WHITE
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int x1 = ox +  x[i];
+        int y1 = oy -  y[i];
+        int x2 = ox +  x[j];
+        int y2 = oy -  y[j];
+        line(x1, y1, x2, y2);
+    }
+
+    // draw transformed shape in YELLOW
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int x1 = ox + rx[i];
+        int y1 = oy - ry[i];
+        int x2 = ox + rx[j];
+        int y2 = oy - ry[j];
+        line(x1, y1, x2, y2);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

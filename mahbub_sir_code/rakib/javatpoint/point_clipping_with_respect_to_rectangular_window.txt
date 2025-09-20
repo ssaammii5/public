@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <graphics.h>
+#include <stdlib.h>
+
+int main()
+{
+    int gm, gd;
+    int xcmin, ycmin, xcmax, ycmax, x, y, c;
+
+    // Initialize graphics window
+    gd = DETECT;
+    initgraph(&gd, &gm, "");
+
+    // Get coordinates for the clipping window (rectangular boundary)
+    printf("Enter the clipmin coordinate (xcmin, ycmin):\n");
+    scanf("%d%d", &xcmin, &ycmin);
+
+    printf("Enter the clipmax coordinate (xcmax, ycmax):\n");
+    scanf("%d%d", &xcmax, &ycmax);
+
+    // Adjust the rectangle drawing to match top-left and bottom-right corners
+    rectangle(xcmin, ycmin, xcmax, ycmax);  // Draw the rectangle properly
+
+    // Get the point coordinates
+    printf("Enter the coordinate of the point (x, y):\n");
+    scanf("%d%d", &x, &y);
+
+    // Display the point on the screen
+    putpixel(x, y, WHITE);
+
+    // Provide a menu for the user to choose point clipping
+    printf("\n1. Point clipping\n2. Exit\nEnter your choice:\n");
+    scanf("%d", &c);
+
+    switch (c)
+    {
+    case 1:
+        // Redraw the rectangle window
+        rectangle(xcmin, ycmin, xcmax, ycmax);
+        printf("******* POINT CLIPPING ******\n");
+
+        // Check if the point lies inside the rectangle (clip window)
+        if ((x >= xcmin && x <= xcmax) && (y >= ycmin && y <= ycmax))
+        {
+            printf("The point is inside the clip window\n");
+            putpixel(x, y, WHITE); // Redraw the point if inside
+        }
+        else
+        {
+            printf("The point is outside the clip window\n");
+            printf("The point is clipped\n");
+        }
+        break;
+
+    case 2:
+        // Exit the program
+        closegraph();  // Close the graphics window
+        exit(0);
+    }
+
+    getch();  // Wait for a key press before exiting
+    closegraph();  // Close the graphics window
+    return 0;
+}

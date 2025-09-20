@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <graphics.h>
+#include <math.h>
+
+// Function to rotate a point (x, y) around the origin by a given angle
+void rotate(int& x, int& y, double angle)
+{
+    double rad = angle * M_PI / 180;  // Convert angle to radians
+    double cosA = cos(rad);
+    double sinA = sin(rad);
+
+    int newX = floor(x * cosA - y * sinA);
+    int newY = floor(x * sinA + y * cosA);
+
+    x = newX;
+    y = newY;
+}
+
+int main()
+{
+    int gd = DETECT, gm;
+    int x1, y1, x2, y2, x3, y3;
+    double angle;
+
+    // Initialize graphics window
+    initgraph(&gd, &gm, "");
+
+    setcolor(RED);
+
+    // Input the coordinates of the triangle
+    printf("Enter coordinates of the triangle (x1, y1, x2, y2, x3, y3): ");
+    scanf("%d%d%d%d%d%d", &x1, &y1, &x2, &y2, &x3, &y3);
+
+    // Clear the screen and draw the original triangle
+    cleardevice();
+    setbkcolor(WHITE);
+    line(x1, y1, x2, y2);
+    line(x2, y2, x3, y3);
+    line(x3, y3, x1, y1);
+
+    getch();  // Wait for key press before rotating
+
+    // Input the rotation angle
+    printf("Enter rotation angle in degrees: ");
+    scanf("%lf", &angle);
+
+    // Rotate the triangle around the origin (0, 0)
+    rotate(x1, y1, angle);
+    rotate(x2, y2, angle);
+    rotate(x3, y3, angle);
+
+    // Clear the screen and draw the rotated triangle
+    cleardevice();
+    line(x1, y1, x2, y2);
+    line(x2, y2, x3, y3);
+    line(x3, y3, x1, y1);
+
+    getch();  // Wait for key press before closing
+
+    // Close graphics window
+    closegraph();
+    return 0;
+}

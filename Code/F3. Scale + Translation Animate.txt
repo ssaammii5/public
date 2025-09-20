@@ -1,0 +1,110 @@
+// 2D Shape: Animated Scaling then Translation (two-phase)
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+void drawPoly(int x[], int y[], int n, int ox, int oy, int color) {
+    setcolor(color);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + x[i], oy - y[i], ox + x[j], oy - y[j]);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int w = getmaxx(), h = getmaxy();
+    int ox = w / 2, oy = h / 2;
+
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+
+    double sxFactor, syFactor;
+    cout << "Enter scaling factors (sx sy): ";
+    cin >> sxFactor >> syFactor;
+    int tx, ty;
+    cout << "Enter translation vector (tx ty): ";
+    cin >> tx >> ty;
+
+    // Compute centroid
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += x[i];
+        cy += y[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    const int steps = 60;
+
+    // Phase 1: scale from 1 to target factors
+    for (int s = 0; s <= steps; ++s) {
+        double t = (double)s / steps;
+        double curSX = 1.0 + (sxFactor - 1.0) * t;
+        double curSY = 1.0 + (syFactor - 1.0) * t;
+
+        int fx[20], fy[20];
+        for (int i = 0; i < n; ++i) {
+            double dx = x[i] - cx;
+            double dy = y[i] - cy;
+            double sx = dx * curSX;
+            double sy = dy * curSY;
+            double fx_d = sx + cx;
+            double fy_d = sy + cy;
+            fx[i] = (int)(fx_d + (fx_d > 0 ? 0.5 : -0.5));
+            fy[i] = (int)(fy_d + (fy_d > 0 ? 0.5 : -0.5));
+        }
+
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(fx, fy, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    // Cache fully scaled coordinates
+    int sxFull[20], syFull[20];
+    for (int i = 0; i < n; ++i) {
+        double dx = x[i] - cx;
+        double dy = y[i] - cy;
+        double sx = dx * sxFactor;
+        double sy = dy * syFactor;
+        double fx_d = sx + cx;
+        double fy_d = sy + cy;
+        sxFull[i] = (int)(fx_d + (fx_d > 0 ? 0.5 : -0.5));
+        syFull[i] = (int)(fy_d + (fy_d > 0 ? 0.5 : -0.5));
+    }
+
+    // Phase 2: translate from 0 to (tx, ty)
+    for (int s = 0; s <= steps; ++s) {
+        double t = (double)s / steps;
+        double curTX = tx * t;
+        double curTY = ty * t;
+
+        int fx[20], fy[20];
+        for (int i = 0; i < n; ++i) {
+            double fx_d = sxFull[i] + curTX;
+            double fy_d = syFull[i] + curTY;
+            fx[i] = (int)(fx_d + (fx_d > 0 ? 0.5 : -0.5));
+            fy[i] = (int)(fy_d + (fy_d > 0 ? 0.5 : -0.5));
+        }
+
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(fx, fy, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

@@ -1,0 +1,142 @@
+#include <iostream>
+#include <graphics.h>
+#include <conio.h>
+#include <dos.h>
+
+using namespace std;
+
+class data {
+    int gd, gmode, xmin, ymin, xmax, ymax;
+    int a1, a2;
+    float xs, ys, xe, ye;
+    float x1, y1, x2, y2, x3, y3;
+    float maxx, maxy;
+
+public:
+    void getdata();
+    void find();
+    void clip();
+    void display(float, float, float, float);
+    void checkonof(int);
+    void showbit(int);
+};
+
+void data::getdata() {
+    cout << "Enter the minimum and maximum coordinates of the window (xmin, ymin, xmax, ymax): ";
+    cin >> xmin >> ymin >> xmax >> ymax;
+    cout << "Enter the endpoints of the line to be clipped (x1, y1, x2, y2): ";
+    cin >> xs >> ys >> xe >> ye;
+    display(xs, ys, xe, ye);  // Display the initial window and line
+}
+
+void data::display(float xs, float ys, float xe, float ye) {
+    int gd = DETECT, gmode;
+    initgraph(&gd, &gmode, "");  // Initialize graphics mode
+
+    maxx = getmaxx();
+    maxy = getmaxy();
+
+    // Draw the coordinate axes
+    line(maxx / 2, 0, maxx / 2, maxy);
+    line(0, maxy / 2, maxx, maxy / 2);
+
+    // Draw the clipping window
+    rectangle(maxx / 2 + xmin, maxy / 2 - ymax, maxx / 2 + xmax, maxy / 2 - ymin);
+
+    // Draw the original line
+    line(maxx / 2 + xs, maxy / 2 - ys, maxx / 2 + xe, maxy / 2 - ye);
+
+    getch();  // Wait for a key press
+}
+
+void data::find() {
+    a1 = a2 = 0;
+
+    if (ys > ymax) a1 += 8;  // Top
+    if (ys < ymin) a1 += 4;  // Bottom
+    if (xs > xmax) a1 += 2;  // Right
+    if (xs < xmin) a1 += 1;  // Left
+
+    if (ye > ymax) a2 += 8;
+    if (ye < ymin) a2 += 4;
+    if (xe > xmax) a2 += 2;
+    if (xe < xmin) a2 += 1;
+
+    cout << "\nThe area code of the first point is: ";
+    showbit(a1);
+    cout << "\nThe area code of the second point is: ";
+    showbit(a2);
+}
+
+void data::showbit(int n) {
+    for (int i = 3; i >= 0; i--) {
+        cout << ((n >> i) & 1);  // Show bits of the area code
+    }
+}
+
+void data::clip() {
+    int j = a1 & a2;
+
+    if (j == 0) {
+        cout << "\nThe line is a candidate for clipping.";
+
+        if (a1 == 0) {
+            x2 = xs;
+            y2 = ys;
+        } else {
+            checkonof(a1);
+            x2 = x1;
+            y2 = y1;
+        }
+
+        if (a2 == 0) {
+            x3 = xe;
+            y3 = ye;
+        } else {
+            checkonof(a2);
+            x3 = x1;
+            y3 = y1;
+        }
+
+        // Clipping done, display the clipped line
+        display(x2, y2, x3, y3);
+        cout << "\nLine after clipping.";
+    } else if (a1 == 0 && a2 == 0) {
+        cout << "\nThe line is fully visible in the window.";
+    } else {
+        cout << "\nThe line is outside the clipping window.";
+    }
+
+    getch();
+}
+
+void data::checkonof(int code) {
+    x1 = 0;
+    y1 = 0;
+
+    if (code & 1) {  // Left
+        x1 = xmin;
+        y1 = ys + (x1 - xs) * (ye - ys) / (xe - xs);
+    }
+    if (code & 2) {  // Right
+        x1 = xmax;
+        y1 = ys + (x1 - xs) * (ye - ys) / (xe - xs);
+    }
+    if (code & 4) {  // Bottom
+        y1 = ymin;
+        x1 = xs + (y1 - ys) * (xe - xs) / (ye - ys);
+    }
+    if (code & 8) {  // Top
+        y1 = ymax;
+        x1 = xs + (y1 - ys) * (xe - xs) / (ye - ys);
+    }
+}
+
+int main() {
+    data s;
+    s.getdata();
+    s.find();
+    s.clip();
+    closegraph();
+    return 0;
+}

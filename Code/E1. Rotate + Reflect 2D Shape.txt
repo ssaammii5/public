@@ -1,0 +1,88 @@
+// 2D Shape: Rotation then Reflection
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    // Window center
+    int w = getmaxx(), h = getmaxy();
+    int ox = w/2, oy = h/2;
+
+    // Read polygon
+    int n;
+    cout << "Enter number of vertices: ";
+    cin  >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y) relative to center: ";
+        cin  >> x[i] >> y[i];
+    }
+
+    // Read transform parameters
+    double angle;
+    cout << "Enter rotation angle in degrees: ";
+    cin  >> angle;
+    cout << "Choose reflection axis (1 = X-axis, 2 = Y-axis): ";
+    int axis;
+    cin  >> axis;
+
+    // Compute centroid of input points
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += x[i]; cy += y[i];
+    }
+    cx /= n; cy /= n;
+
+    // Precompute rotation
+    double rad = angle * M_PI / 180.0;
+
+    // Rotate about centroid
+    double tx, ty;
+    double rnx, rny;
+    int rx[20], ry[20];
+    for (int i = 0; i < n; ++i) {
+        tx = x[i] - cx;
+        ty = y[i] - cy;
+        rnx = tx * cos(rad) - ty * sin(rad);
+        rny = tx * sin(rad) + ty * cos(rad);
+        rx[i] = (int)(rnx + cx);
+        ry[i] = (int)(rny + cy);
+    }
+
+    // Reflect rotated points
+    int fx[20], fy[20];
+    for (int i = 0; i < n; ++i) {
+        if (axis == 1) {        // X-axis
+            fx[i] =  rx[i];
+            fy[i] = -ry[i];
+        } else {                // Y-axis
+            fx[i] = -rx[i];
+            fy[i] =  ry[i];
+        }
+    }
+
+    // Draw original shape in WHITE
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox +  x[i], oy -  y[i],
+             ox +  x[j], oy -  y[j]);
+    }
+
+    // Draw transformed shape in YELLOW
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + fx[i], oy - fy[i],
+             ox + fx[j], oy - fy[j]);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

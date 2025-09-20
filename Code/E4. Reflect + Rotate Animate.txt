@@ -1,0 +1,105 @@
+// Animated 2D Shape: Reflect then Rotate (Animated)
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+// Draws a polygon given arrays of x/y (relative to center) and window origin
+void drawPoly(int *x, int *y, int n, int ox, int oy, int color) {
+    setcolor(color);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + x[i], oy - y[i], ox + x[j], oy - y[j]);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    // Compute window center for drawing origin
+    int w = getmaxx(), h = getmaxy();
+    int ox = w/2, oy = h/2;
+
+    // Input polygon vertices (coordinates relative to center)
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+
+    // Input reflection axis and rotation angle
+    cout << "Reflection axis (1 = X-axis, 2 = Y-axis): ";
+    int axis; cin >> axis;
+    cout << "Rotation angle (degrees): ";
+    double totalAngle; cin >> totalAngle;
+
+    // Animation parameters
+    const int steps = 60;
+    const double radPerStep = (totalAngle * M_PI/180.0) / steps;
+
+    // --- Phase 1: Animate reflection ("flip") ---
+    for (int s = 0; s <= steps; ++s) {
+        double f = 1.0 - 2.0 * s / steps;  // goes from +1 down to -1
+        int rx1[20], ry1[20];
+        for (int i = 0; i < n; ++i) {
+            if (axis == 1) {      // reflect about X-axis: invert y
+                rx1[i] =  x[i];
+                ry1[i] = (int)(y[i] * f);
+            } else {              // reflect about Y-axis: invert x
+                rx1[i] = (int)(x[i] * f);
+                ry1[i] =  y[i];
+            }
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(rx1, ry1, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    // Build fully reflected coordinates
+    int rxFull[20], ryFull[20];
+    for (int i = 0; i < n; ++i) {
+        if (axis == 1) {
+            rxFull[i] =  x[i];
+            ryFull[i] = -y[i];
+        } else {
+            rxFull[i] = -x[i];
+            ryFull[i] =  y[i];
+        }
+    }
+
+    // Compute centroid of the reflected shape (for rotation pivot)
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += rxFull[i];
+        cy += ryFull[i];
+    }
+    cx /= n; cy /= n;
+
+    // --- Phase 2: Animate rotation about centroid ---
+    for (int s = 1; s <= steps; ++s) {
+        double ang = radPerStep * s;
+        int rx2[20], ry2[20];
+        for (int i = 0; i < n; ++i) {
+            double dx = rxFull[i] - cx;
+            double dy = ryFull[i] - cy;
+            double nx = dx * cos(ang) - dy * sin(ang);
+            double ny = dx * sin(ang) + dy * cos(ang);
+            rx2[i] = (int)(nx + cx);
+            ry2[i] = (int)(ny + cy);
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(rx2, ry2, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}

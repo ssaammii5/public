@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <graphics.h>
+#include <math.h>
+
+int main()
+{
+    int gd = DETECT, gm;
+    int x1, y1, x2, y2, new_x1, new_y1, new_x2, new_y2;
+    double s, c, angle;
+
+    // Initialize graphics
+    initgraph(&gd, &gm, "");
+
+    // Set line color
+    setcolor(RED);
+
+    // Input the coordinates of the line
+    printf("Enter coordinates of the line (x1, y1, x2, y2): ");
+    scanf("%d%d%d%d", &x1, &y1, &x2, &y2);
+
+    // Draw the original line
+    line(x1, y1, x2, y2);
+    // getch();
+
+    // Input rotation angle
+    printf("Enter rotation angle in degrees: ");
+    scanf("%lf", &angle);
+
+    // Convert angle to radians
+    angle = angle * M_PI / 180;
+
+    // Calculate cosine and sine of the angle
+    c = cos(angle);
+    s = sin(angle);
+
+    // Apply rotation formula to calculate new coordinates
+    new_x1 = floor(x1 * c - y1 * s);
+    new_y1 = floor(x1 * s + y1 * c);
+    new_x2 = floor(x2 * c - y2 * s);
+    new_y2 = floor(x2 * s + y2 * c);
+
+    // Clear the screen
+    cleardevice();
+
+    // Draw the rotated line
+    setcolor(RED);
+    line(new_x1, new_y1, new_x2, new_y2);
+
+    getch();  // Wait for user input
+    closegraph();  // Close the graphics window
+
+    return 0;
+}

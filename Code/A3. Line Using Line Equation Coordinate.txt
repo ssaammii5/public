@@ -1,0 +1,42 @@
+// Draw Line Using Simple Line Equation
+
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+void DrawLineEquation(int x0, int y0, int x1, int y1) {
+    if (x0 == x1) {
+        // Vertical line
+        int ymin = (y0 < y1) ? y0 : y1;
+        int ymax = (y0 < y1) ? y1 : y0;
+        for (int y = ymin; y <= ymax; ++y) {
+            putpixel(x0, y, WHITE);
+            delay(10);
+        }
+    } else {
+        double m = double(y1 - y0) / (x1 - x0);
+        double c = y0 - m * x0;
+        int xmin = (x0 < x1) ? x0 : x1;
+        int xmax = (x0 < x1) ? x1 : x0;
+        for (int x = xmin; x <= xmax; ++x) {
+            int y = (int)(m * x + c);
+            putpixel(x, y, WHITE);
+            delay(10);
+        }
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    int x0, y0, x1, y1;
+    cout << "Enter x0 y0: ";
+    cin >> x0 >> y0;
+    cout << "Enter x1 y1: ";
+    cin >> x1 >> y1;
+    DrawLineEquation(x0, y0, x1, y1);
+    getch();
+    closegraph();
+    return 0;
+}

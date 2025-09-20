@@ -1,0 +1,102 @@
+// 2D Shape: Animated Translation then Scaling
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+void drawPoly(int x[], int y[], int n, int ox, int oy, int color) {
+    setcolor(color);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(ox + x[i], oy - y[i], ox + x[j], oy - y[j]);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int w = getmaxx(), h = getmaxy();
+    int ox = w / 2, oy = h / 2;
+
+    // Read polygon
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Vertex " << i << " (x y) relative to center: ";
+        cin >> x[i] >> y[i];
+    }
+
+    // Read translation and scaling parameters
+    int tx, ty;
+    cout << "Enter translation vector (tx ty): ";
+    cin >> tx >> ty;
+    double sxFactor, syFactor;
+    cout << "Enter scaling factors (sx sy): ";
+    cin >> sxFactor >> syFactor;
+
+    // Compute centroid of original polygon
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += x[i];
+        cy += y[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    const int steps = 60;
+
+    // Phase 1: Animate translation
+    for (int s = 0; s <= steps; ++s) {
+        double t = (double)s / steps;
+        double curTX = tx * t;
+        double curTY = ty * t;
+        int txPoly[20], tyPoly[20];
+        for (int i = 0; i < n; ++i) {
+            double nx = x[i] + curTX;
+            double ny = y[i] + curTY;
+            txPoly[i] = (int)(nx + (nx > 0 ? 0.5 : -0.5));
+            tyPoly[i] = (int)(ny + (ny > 0 ? 0.5 : -0.5));
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(txPoly, tyPoly, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    // Cache fully translated coordinates
+    int txFull[20], tyFull[20];
+    for (int i = 0; i < n; ++i) {
+        txFull[i] = x[i] + tx;
+        tyFull[i] = y[i] + ty;
+    }
+
+    // Phase 2: Animate scaling about centroid
+    for (int s = 0; s <= steps; ++s) {
+        double t = (double)s / steps;
+        double curSX = 1.0 + (sxFactor - 1.0) * t;
+        double curSY = 1.0 + (syFactor - 1.0) * t;
+        int sxPoly[20], syPoly[20];
+        for (int i = 0; i < n; ++i) {
+            double dx = txFull[i] - cx;
+            double dy = tyFull[i] - cy;
+            double sx = dx * curSX;
+            double sy = dy * curSY;
+            double fx = sx + cx;
+            double fy = sy + cy;
+            sxPoly[i] = (int)(fx + (fx > 0 ? 0.5 : -0.5));
+            syPoly[i] = (int)(fy + (fy > 0 ? 0.5 : -0.5));
+        }
+        cleardevice();
+        drawPoly(x, y, n, ox, oy, WHITE);
+        drawPoly(sxPoly, syPoly, n, ox, oy, YELLOW);
+        delay(50);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}
