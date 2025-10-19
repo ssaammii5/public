@@ -1,0 +1,194 @@
+// Combined 2D Transformations
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+// Global variables
+int n;                    // number of vertices
+int origX[20], origY[20]; // original vertices
+int currX[20], currY[20]; // current vertices after transformations
+int screenCenterX, screenCenterY;
+
+void InitShape() {
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y): ";
+        cin >> origX[i] >> origY[i];
+        currX[i] = origX[i];
+        currY[i] = origY[i];
+    }
+    screenCenterX = getmaxx() / 2;
+    screenCenterY = getmaxy() / 2;
+}
+
+void DrawOriginal() {
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += origX[i];
+        cy += origY[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int x1 = (int)(origX[i] - cx + screenCenterX);
+        int y1 = (int)(origY[i] - cy + screenCenterY);
+        int x2 = (int)(origX[j] - cx + screenCenterX);
+        int y2 = (int)(origY[j] - cy + screenCenterY);
+        line(x1, y1, x2, y2);
+    }
+}
+
+void DrawCurrent() {
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += currX[i];
+        cy += currY[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int x1 = (int)(currX[i] - cx + screenCenterX);
+        int y1 = (int)(currY[i] - cy + screenCenterY);
+        int x2 = (int)(currX[j] - cx + screenCenterX);
+        int y2 = (int)(currY[j] - cy + screenCenterY);
+        line(x1, y1, x2, y2);
+    }
+}
+
+void Rotate() {
+    double angle;
+    cout << "Enter rotation angle in degrees: ";
+    cin >> angle;
+    double rad = angle * acos(-1) / 180.0;
+    
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += currX[i];
+        cy += currY[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    for (int i = 0; i < n; ++i) {
+        double tx = currX[i] - cx;
+        double ty = currY[i] - cy;
+        double rnx = tx * cos(rad) - ty * sin(rad);
+        double rny = tx * sin(rad) + ty * cos(rad);
+        currX[i] = (int)(rnx + cx);
+        currY[i] = (int)(rny + cy);
+    }
+}
+
+void Reflect() {
+    cout << "Choose reflection axis:\n";
+    cout << "1: X-axis\n";
+    cout << "2: Y-axis\n";
+    int axis;
+    cin >> axis;
+    
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += currX[i];
+        cy += currY[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    for (int i = 0; i < n; ++i) {
+        double tx = currX[i] - cx;
+        double ty = currY[i] - cy;
+        if (axis == 1) {
+            currY[i] = (int)(-ty + cy);
+        } else if (axis == 2) {
+            currX[i] = (int)(-tx + cx);
+        }
+    }
+}
+
+void Scale() {
+    double sxFactor, syFactor;
+    cout << "Enter scaling factors (sx sy): ";
+    cin >> sxFactor >> syFactor;
+    
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += currX[i];
+        cy += currY[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    for (int i = 0; i < n; ++i) {
+        double tx = currX[i] - cx;
+        double ty = currY[i] - cy;
+        currX[i] = (int)(tx * sxFactor + cx);
+        currY[i] = (int)(ty * syFactor + cy);
+    }
+}
+
+void Translate() {
+    int tx, ty;
+    cout << "Enter translation vector (tx ty): ";
+    cin >> tx >> ty;
+    
+    for (int i = 0; i < n; ++i) {
+        currX[i] += tx;
+        currY[i] += ty;
+    }
+}
+
+void Shear() {
+    double shx, shy;
+    cout << "Enter horizontal shear factor (shx): ";
+    cin >> shx;
+    cout << "Enter vertical shear factor (shy): ";
+    cin >> shy;
+    
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += currX[i];
+        cy += currY[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    for (int i = 0; i < n; ++i) {
+        double tx = currX[i] - cx;
+        double ty = currY[i] - cy;
+        double snx = tx + shx * ty;
+        double sny = shy * tx + ty;
+        currX[i] = (int)(snx + cx);
+        currY[i] = (int)(sny + cy);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    InitShape();
+
+    // Call transformations here - each handles its own input
+    Rotate();
+    Reflect();
+    // Scale();
+    // Translate();
+    // Shear();
+
+    cleardevice();
+    DrawOriginal();
+    DrawCurrent();
+
+    getch();
+    closegraph();
+    return 0;
+}

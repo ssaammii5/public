@@ -1,0 +1,75 @@
+// 2D Shape Shearing about Centroid (Centered in Window)
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int n;
+    cout << "Enter number of vertices: ";
+    cin >> n;
+    int x[20], y[20];
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter vertex " << i << " (x y): ";
+        cin >> x[i] >> y[i];
+    }
+
+    double shx, shy;
+    cout << "Enter horizontal shear factor (shx): ";
+    cin >> shx;
+    cout << "Enter vertical shear factor (shy): ";
+    cin >> shy;
+
+    // Compute centroid of the polygon
+    double cx = 0, cy = 0;
+    for (int i = 0; i < n; ++i) {
+        cx += x[i];
+        cy += y[i];
+    }
+    cx /= n;
+    cy /= n;
+
+    // Screen center
+    int sx = getmaxx() / 2;
+    int sy = getmaxy() / 2;
+
+    // Compute sheared vertices
+    int shx_arr[20], shy_arr[20];
+    for (int i = 0; i < n; ++i) {
+        // Translate to centroid
+        double tx = x[i] - cx;
+        double ty = y[i] - cy;
+        // Apply shearing transformation
+        double snx = tx + shx * ty;
+        double sny = shy * tx + ty;
+        // Translate to screen center
+        shx_arr[i] = (int)(snx + sx);
+        shy_arr[i] = (int)(sny + sy);
+    }
+
+    // Draw original shape in WHITE (also centered)
+    setcolor(WHITE);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        int ox1 = (int)(x[i] - cx + sx);
+        int oy1 = (int)(y[i] - cy + sy);
+        int ox2 = (int)(x[j] - cx + sx);
+        int oy2 = (int)(y[j] - cy + sy);
+        line(ox1, oy1, ox2, oy2);
+    }
+
+    // Draw sheared shape in YELLOW
+    setcolor(YELLOW);
+    for (int i = 0; i < n; ++i) {
+        int j = (i + 1) % n;
+        line(shx_arr[i], shy_arr[i], shx_arr[j], shy_arr[j]);
+    }
+
+    getch();
+    closegraph();
+    return 0;
+}
