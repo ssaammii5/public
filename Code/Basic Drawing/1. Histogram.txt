@@ -1,0 +1,93 @@
+// Histogram Implementation (No Spacing Between Bars)
+#include <graphics.h>
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+void DrawHistogram(int data[], int n) {
+    int screenWidth = getmaxx();
+    int screenHeight = getmaxy();
+    
+    int margin = 50;
+    int graphHeight = screenHeight - 2 * margin;
+    int graphWidth = screenWidth - 2 * margin;
+    int barWidth = graphWidth / n;
+    
+    // Draw axes
+    setcolor(WHITE);
+    line(margin, margin, margin, screenHeight - margin); // Y-axis
+    line(margin, screenHeight - margin, screenWidth - margin, screenHeight - margin); // X-axis
+    
+    // Find maximum value for scaling
+    int maxValue = data[0];
+    for (int i = 1; i < n; ++i) {
+        if (data[i] > maxValue)
+            maxValue = data[i];
+    }
+    
+    // Draw bars (no spacing)
+    int colors[] = {RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA, LIGHTRED, LIGHTGREEN, LIGHTBLUE};
+    
+    for (int i = 0; i < n; ++i) {
+        int barHeight = (int)((float)data[i] / maxValue * graphHeight);
+        int x1 = margin + i * barWidth;
+        int y1 = screenHeight - margin - barHeight;
+        int x2 = x1 + barWidth;
+        int y2 = screenHeight - margin;
+        
+        // Draw filled bar
+        setcolor(colors[i % 9]);
+        setfillstyle(SOLID_FILL, colors[i % 9]);
+        bar(x1, y1, x2, y2);
+        
+        // Draw border around bar
+        setcolor(WHITE);
+        rectangle(x1, y1, x2, y2);
+        
+        // Draw value on top of bar
+        char valueStr[10];
+        sprintf(valueStr, "%d", data[i]);
+        outtextxy(x1 + barWidth/2 - 10, y1 - 15, valueStr);
+        
+        // Draw label below bar
+        char labelStr[10];
+        sprintf(labelStr, "%d", i + 1);
+        outtextxy(x1 + barWidth/2 - 5, y2 + 5, labelStr);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    
+    int n;
+    cout << "Enter number of bars: ";
+    cin >> n;
+    
+    int data[20];
+    cout << "Enter frequency values:\n";
+    for (int i = 0; i < n; ++i) {
+        cout << "Frequency " << i + 1 << ": ";
+        cin >> data[i];
+    }
+    
+    DrawHistogram(data, n);
+    
+    getch();
+    closegraph();
+    return 0;
+}
+
+
+/*
+
+Enter number of bars: 5
+Enter frequency values:
+Frequency 1: 120
+Frequency 2: 150
+Frequency 3: 180
+Frequency 4: 140
+Frequency 5: 90
+
+
+*/

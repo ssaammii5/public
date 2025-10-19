@@ -1,0 +1,11 @@
+Enter center coordinates (xc yc): 250 250
+Enter radii (rx ry): 150 100
+
+
+For Circle (special case):
+Enter center coordinates (xc yc): 300 200
+Enter radii (rx ry): 120 120
+
+For Horizontal Ellipse:
+Enter center coordinates (xc yc): 320 240
+Enter radii (rx ry): 200 80

@@ -1,0 +1,108 @@
+// Pie Chart Implementation
+#include <graphics.h>
+#include <iostream>
+#include <conio.h>
+#include <cmath>
+using namespace std;
+
+void DrawPieChart(int data[], int n, int xc, int yc, int radius) {
+    // Calculate total sum
+    int total = 0;
+    for (int i = 0; i < n; ++i) {
+        total += data[i];
+    }
+    
+    // Colors for pie slices
+    int colors[] = {RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA, LIGHTRED, LIGHTGREEN, LIGHTBLUE};
+    
+    int startAngle = 0;
+    
+    // Draw each slice
+    for (int i = 0; i < n; ++i) {
+        // Calculate angle for this slice
+        double percentage = (double)data[i] / total;
+        int sweepAngle = (int)(percentage * 360);
+        
+        // Draw pie slice
+        setcolor(colors[i % 9]);
+        setfillstyle(SOLID_FILL, colors[i % 9]);
+        pieslice(xc, yc, startAngle, startAngle + sweepAngle, radius);
+        
+        // Calculate midpoint angle for label placement
+        double midAngle = (startAngle + startAngle + sweepAngle) / 2.0;
+        double radians = midAngle * M_PI / 180.0;
+        
+        // Position for percentage label (outside the circle)
+        int labelX = xc + (int)((radius + 30) * cos(radians));
+        int labelY = yc - (int)((radius + 30) * sin(radians));
+        
+        // Draw percentage text
+        setcolor(WHITE);
+        char label[20];
+        sprintf(label, "%.1f%%", percentage * 100);
+        outtextxy(labelX - 20, labelY - 5, label);
+        
+        // Draw value text
+        char valueStr[20];
+        sprintf(valueStr, "(%d)", data[i]);
+        outtextxy(labelX - 15, labelY + 10, valueStr);
+        
+        startAngle += sweepAngle;
+    }
+    
+    // Draw legend
+    int legendX = 50;
+    int legendY = 50;
+    setcolor(WHITE);
+    outtextxy(legendX, legendY - 20, "Legend:");
+    
+    for (int i = 0; i < n; ++i) {
+        // Draw colored box
+        setcolor(colors[i % 9]);
+        setfillstyle(SOLID_FILL, colors[i % 9]);
+        bar(legendX, legendY + i * 25, legendX + 20, legendY + i * 25 + 15);
+        
+        // Draw legend text
+        setcolor(WHITE);
+        char legendText[30];
+        sprintf(legendText, "Item %d: %d", i + 1, data[i]);
+        outtextxy(legendX + 30, legendY + i * 25 + 3, legendText);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    
+    int n;
+    cout << "Enter number of slices: ";
+    cin >> n;
+    
+    int data[20];
+    cout << "Enter values for each slice:\n";
+    for (int i = 0; i < n; ++i) {
+        cout << "Slice " << i + 1 << ": ";
+        cin >> data[i];
+    }
+    
+    int xc = getmaxx() / 2;
+    int yc = getmaxy() / 2;
+    int radius = 150;
+    
+    DrawPieChart(data, n, xc, yc, radius);
+    
+    getch();
+    closegraph();
+    return 0;
+}
+
+/*
+Enter number of slices: 5
+Enter values for each slice:
+Slice 1: 120
+Slice 2: 150
+Slice 3: 180
+Slice 4: 140
+Slice 5: 90
+
+*/

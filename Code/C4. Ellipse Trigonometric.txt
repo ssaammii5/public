@@ -1,0 +1,34 @@
+// Ellipse using Trigonometric (Polar/Parametric) Method
+#include <graphics.h>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+void TrigonometricEllipse(int xc, int yc, int rx, int ry) {
+    float theta;
+    int x, y;
+    
+    // Draw ellipse using parametric equations
+    for (theta = 0; theta <= 2 * M_PI; theta += 0.01) {
+        x = xc + rx * cos(theta);
+        y = yc + ry * sin(theta);
+        putpixel(x, y, WHITE);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    
+    int xc, yc, rx, ry;
+    cout << "Enter center coordinates (xc yc): ";
+    cin >> xc >> yc;
+    cout << "Enter radii (rx ry): ";
+    cin >> rx >> ry;
+    
+    TrigonometricEllipse(xc, yc, rx, ry);
+    
+    getch();
+    closegraph();
+    return 0;
+}

@@ -1,0 +1,126 @@
+// Line Chart Implementation
+#include <graphics.h>
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+void DrawLineChart(int data[], int n) {
+    int screenWidth = getmaxx();
+    int screenHeight = getmaxy();
+    
+    int margin = 60;
+    int graphHeight = screenHeight - 2 * margin;
+    int graphWidth = screenWidth - 2 * margin;
+    
+    // Draw axes
+    setcolor(WHITE);
+    line(margin, margin, margin, screenHeight - margin); // Y-axis
+    line(margin, screenHeight - margin, screenWidth - margin, screenHeight - margin); // X-axis
+    
+    // Add axis labels
+    outtextxy(screenWidth - margin + 10, screenHeight - margin - 5, "X");
+    outtextxy(margin - 5, margin - 20, "Y");
+    
+    // Find maximum value for scaling
+    int maxValue = data[0];
+    int minValue = data[0];
+    for (int i = 1; i < n; ++i) {
+        if (data[i] > maxValue)
+            maxValue = data[i];
+        if (data[i] < minValue)
+            minValue = data[i];
+    }
+    
+    // Add some padding to max value
+    maxValue += 10;
+    
+    // Calculate spacing between points
+    int xSpacing = graphWidth / (n - 1);
+    
+    // Arrays to store screen coordinates
+    int xCoords[20], yCoords[20];
+    
+    // Calculate coordinates for each point
+    for (int i = 0; i < n; ++i) {
+        xCoords[i] = margin + i * xSpacing;
+        yCoords[i] = screenHeight - margin - (int)((float)(data[i] - minValue) / (maxValue - minValue) * graphHeight);
+    }
+    
+    // Draw lines connecting points
+    setcolor(YELLOW);
+    for (int i = 0; i < n - 1; ++i) {
+        line(xCoords[i], yCoords[i], xCoords[i + 1], yCoords[i + 1]);
+    }
+    
+    // Draw points and labels
+    for (int i = 0; i < n; ++i) {
+        // Draw circle at each data point
+        setcolor(RED);
+        circle(xCoords[i], yCoords[i], 4);
+        setfillstyle(SOLID_FILL, RED);
+        floodfill(xCoords[i], yCoords[i], RED);
+        
+        // Draw value above point
+        setcolor(WHITE);
+        char valueStr[10];
+        sprintf(valueStr, "%d", data[i]);
+        outtextxy(xCoords[i] - 10, yCoords[i] - 20, valueStr);
+        
+        // Draw X-axis label
+        char labelStr[10];
+        sprintf(labelStr, "%d", i + 1);
+        outtextxy(xCoords[i] - 5, screenHeight - margin + 10, labelStr);
+        
+        // Draw grid line (optional)
+        setcolor(DARKGRAY);
+        line(xCoords[i], screenHeight - margin, xCoords[i], screenHeight - margin - 5);
+    }
+    
+    // Draw horizontal grid lines
+    setcolor(DARKGRAY);
+    for (int i = 1; i <= 5; ++i) {
+        int y = screenHeight - margin - (graphHeight * i / 5);
+        line(margin, y, margin + 5, y);
+        
+        // Draw grid value
+        int gridValue = minValue + ((maxValue - minValue) * i / 5);
+        char gridStr[10];
+        sprintf(gridStr, "%d", gridValue);
+        outtextxy(margin - 35, y - 5, gridStr);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    
+    int n;
+    cout << "Enter number of data points: ";
+    cin >> n;
+    
+    int data[20];
+    cout << "Enter data values:\n";
+    for (int i = 0; i < n; ++i) {
+        cout << "Point " << i + 1 << ": ";
+        cin >> data[i];
+    }
+    
+    DrawLineChart(data, n);
+    
+    getch();
+    closegraph();
+    return 0;
+}
+
+/*
+Enter number of data points: 7
+Enter data values:
+Point 1: 25
+Point 2: 28
+Point 3: 30
+Point 4: 27
+Point 5: 26
+Point 6: 29
+Point 7: 31
+
+*/

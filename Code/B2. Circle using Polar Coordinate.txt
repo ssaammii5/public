@@ -1,30 +1,70 @@
-// Draw Circle Using Polar Coordinates
-
+// Draw Circle Using Polar Coordinate Method
 #include <graphics.h>
 #include <iostream>
 #include <cmath>
+#include <conio.h>
 using namespace std;
 
-void PolarCircle(int xc, int yc, int r) {
+void PlotCirclePoints(int h, int k, int x, int y) {
+    // Plot 8 symmetric points
+    putpixel(h + x, k + y, WHITE);    // (x+h, y+k)
+    putpixel(h - x, k + y, WHITE);    // (-x+h, y+k)
+    putpixel(h + x, k - y, WHITE);    // (x+h, -y+k)
+    putpixel(h - x, k - y, WHITE);    // (-x+h, -y+k)
+    putpixel(h + y, k + x, WHITE);    // (y+h, x+k)
+    putpixel(h - y, k + x, WHITE);    // (-y+h, x+k)
+    putpixel(h + y, k - x, WHITE);    // (y+h, -x+k)
+    putpixel(h - y, k - x, WHITE);    // (-y+h, -x+k)
+}
+
+void PolarCircle(int h, int k, int r) {
+    // Step 1: Set variables
     const double PI = acos(-1);
-    for (double theta = 0; theta < 2 * PI; theta += 1.0 / r) {
-        int x = xc + (int)(r * cos(theta));
-        int y = yc + (int)(r * sin(theta));
-        putpixel(x, y, WHITE);
-        delay(10);
+    double theta = 0;
+    double thetaEnd = (22.0 / 7.0) / 4.0;  // π/4 radians (45 degrees)
+    double stepSize = 1.0 / r;  // i = step size
+
+    // Step 2: If θ > θend then stop
+    while (theta <= thetaEnd) {
+        // Step 3: Calculate x and y using polar equations
+        int x = (int)(r * cos(theta) + 0.5);  // x = r*cos(θ)
+        int y = (int)(r * sin(theta) + 0.5);  // y = r*sin(θ)
+
+        // Step 4: 8-way symmetry - plot all 8 points
+        PlotCirclePoints(h, k, x, y);
+
+        // Step 5: θ = θ + i, go to step 2
+        theta += stepSize;
+        delay(5);
     }
 }
 
 int main() {
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "");
-    int xc, yc, r;
-    cout << "Enter center xc yc: ";
-    cin >> xc >> yc;
+
+    int h, k, r;
+    cout << "Enter center (h k): ";
+    cin >> h >> k;
     cout << "Enter radius r: ";
     cin >> r;
-    PolarCircle(xc, yc, r);
+
+    PolarCircle(h, k, r);
+
     getch();
     closegraph();
     return 0;
 }
+
+/*
+
+Enter center (h k): 320 240
+Enter radius r: 100
+
+Enter center (h k): 250 200
+Enter radius r: 120
+
+Enter center (h k): 400 300
+Enter radius r: 80
+
+*/

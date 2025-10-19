@@ -1,0 +1,73 @@
+// Draw Circle Using Mid-Point Circle Algorithm
+#include <graphics.h>
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+void PlotCirclePoints(int xc, int yc, int x, int y) {
+    // Plot 8 symmetric points
+    putpixel(xc + x, yc + y, WHITE);
+    putpixel(xc - x, yc + y, WHITE);
+    putpixel(xc + x, yc - y, WHITE);
+    putpixel(xc - x, yc - y, WHITE);
+    putpixel(xc + y, yc + x, WHITE);
+    putpixel(xc - y, yc + x, WHITE);
+    putpixel(xc + y, yc - x, WHITE);
+    putpixel(xc - y, yc - x, WHITE);
+}
+
+void MidPointCircle(int xc, int yc, int r) {
+    int x = 0;
+    int y = r;
+    int p = 1 - r;  // Initial decision parameter
+
+    // Plot initial points
+    PlotCirclePoints(xc, yc, x, y);
+
+    while (x < y) {
+        x++;
+
+        if (p < 0) {
+            // Mid-point is inside the circle
+            p = p + 2 * x + 1;
+        }
+        else {
+            // Mid-point is outside the circle
+            y--;
+            p = p + 2 * x - 2 * y + 1;
+        }
+
+        // Plot 8 symmetric points
+        PlotCirclePoints(xc, yc, x, y);
+        delay(10);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+
+    int xc, yc, r;
+    cout << "Enter center (xc yc): ";
+    cin >> xc >> yc;
+    cout << "Enter radius r: ";
+    cin >> r;
+
+    MidPointCircle(xc, yc, r);
+
+    getch();
+    closegraph();
+    return 0;
+}
+
+/*
+Enter center (xc yc): 320 240
+Enter radius r: 100
+
+Enter center (xc yc): 250 250
+Enter radius r: 120
+
+Enter center (xc yc): 400 300
+Enter radius r: 80
+
+*/

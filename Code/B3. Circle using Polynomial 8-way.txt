@@ -1,0 +1,65 @@
+// Draw Circle Using Polynomial Method (8-Way Symmetry)
+#include <graphics.h>
+#include <iostream>
+#include <cmath>
+#include <conio.h>
+using namespace std;
+
+void PlotCirclePoints(int xc, int yc, int x, int y) {
+    // Plot 8 symmetric points
+    putpixel(xc + x, yc + y, WHITE);   // Octant 1
+    putpixel(xc - x, yc + y, WHITE);   // Octant 4
+    putpixel(xc + x, yc - y, WHITE);   // Octant 8
+    putpixel(xc - x, yc - y, WHITE);   // Octant 5
+    putpixel(xc + y, yc + x, WHITE);   // Octant 2
+    putpixel(xc - y, yc + x, WHITE);   // Octant 3
+    putpixel(xc + y, yc - x, WHITE);   // Octant 7
+    putpixel(xc - y, yc - x, WHITE);   // Octant 6
+}
+
+void PolynomialCircle(int xc, int yc, int r) {
+    // Step 1: Initialize variables
+    int x = 0;
+    double xEnd = r / sqrt(2);  // Only calculate first octant (45 degrees)
+    
+    // Step 2: Loop while x <= xEnd
+    while (x <= xEnd) {
+        // Step 3: Calculate y using equation y = √(r² - x²)
+        int y = (int)(sqrt(r * r - x * x) + 0.5);  // Round to nearest integer
+        
+        // Step 4: Plot 8 symmetric points
+        PlotCirclePoints(xc, yc, x, y);
+        
+        // Step 5: Increment x and go to Step 2
+        x++;
+        
+        delay(10);
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    
+    int xc, yc, r;
+    cout << "Enter center (xc yc): ";
+    cin >> xc >> yc;
+    cout << "Enter radius r: ";
+    cin >> r;
+    
+    PolynomialCircle(xc, yc, r);
+    
+    getch();
+    closegraph();
+    return 0;
+}
+
+
+/*
+Enter center (xc yc): 320 240
+Enter radius r: 100
+
+Enter center (xc yc): 250 250
+Enter radius r: 120
+
+*/
