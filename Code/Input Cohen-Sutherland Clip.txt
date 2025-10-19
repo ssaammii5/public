@@ -1,0 +1,20 @@
+Enter clipping window (xMin yMin xMax yMax): 100 100 400 300
+
+Enter number of lines: 6
+Enter line 0 endpoints (x1 y1 x2 y2): 50 50 150 150
+(Partially clipped - enters from top-left)
+
+Enter line 1 endpoints (x1 y1 x2 y2): 200 150 300 200
+(Completely inside - not clipped)
+
+Enter line 2 endpoints (x1 y1 x2 y2): 50 250 450 250
+(Passes through entire window horizontally)
+
+Enter line 3 endpoints (x1 y1 x2 y2): 250 50 250 350
+(Passes through entire window vertically)
+
+Enter line 4 endpoints (x1 y1 x2 y2): 50 50 80 80
+(Completely outside - rejected)
+
+Enter line 5 endpoints (x1 y1 x2 y2): 450 50 500 100
+(Completely outside - rejected)
