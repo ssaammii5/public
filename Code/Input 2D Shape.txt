@@ -28,7 +28,7 @@ For Translation:
 
 
 
-For Scaling Factor:
+For Scaling Factor:--------------------------------
 2.0 2.0
 Uniformly doubles the size of the shape.
 
@@ -49,3 +49,34 @@ Reflects across the y-axis and keeps height unchanged.
 
 1.0 –1.0
 Reflects across the x-axis and keeps width unchanged.
+
+
+
+For Shearing:----------------------
+Shearing Factor Examples
+0.5 0.0
+Horizontal shear only; slants shape to the right based on y-coordinate.
+
+1.0 0.0
+Strong horizontal shear; creates a pronounced rightward slant.
+
+0.0 0.5
+Vertical shear only; slants shape upward based on x-coordinate.
+
+0.0 1.0
+Strong vertical shear; creates a pronounced upward slant.
+
+0.5 0.5
+Combined shearing; applies both horizontal and vertical shear simultaneously.
+
+1.0 1.0
+Strong combined shearing; creates significant distortion in both directions.
+
+-0.5 0.0
+Negative horizontal shear; slants shape to the left.
+
+0.0 -0.5
+Negative vertical shear; slants shape downward.
+
+0.3 0.0
+Subtle horizontal shear; creates gentle rightward slant for smooth effect.
