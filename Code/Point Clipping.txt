@@ -1,0 +1,93 @@
+// Point Clipping Algorithm
+#include <graphics.h>
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+// Clipping window boundaries
+int xMin, yMin, xMax, yMax;
+
+// Function to check if point is inside clipping window
+bool isInside(int x, int y) {
+    return (x >= xMin && x <= xMax && y >= yMin && y <= yMax);
+}
+
+void PointClipping(int points[][2], int n) {
+    // Draw clipping window
+    setcolor(WHITE);
+    rectangle(xMin, yMin, xMax, yMax);
+    outtextxy(xMin - 40, yMin - 20, "Clipping Window");
+    
+    // Check each point
+    for (int i = 0; i < n; i++) {
+        int x = points[i][0];
+        int y = points[i][1];
+        
+        if (isInside(x, y)) {
+            // Point is inside - draw in GREEN
+            setcolor(GREEN);
+            circle(x, y, 3);
+            setfillstyle(SOLID_FILL, GREEN);
+            floodfill(x, y, GREEN);
+            
+            // Label
+            setcolor(WHITE);
+            char label[20];
+            sprintf(label, "P%d(IN)", i + 1);
+            outtextxy(x + 5, y - 10, label);
+        } else {
+            // Point is outside - draw in RED
+            setcolor(RED);
+            circle(x, y, 3);
+            setfillstyle(SOLID_FILL, RED);
+            floodfill(x, y, RED);
+            
+            // Label
+            setcolor(WHITE);
+            char label[20];
+            sprintf(label, "P%d(OUT)", i + 1);
+            outtextxy(x + 5, y - 10, label);
+        }
+    }
+}
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    
+    // Define clipping window
+    cout << "Enter clipping window (xMin yMin xMax yMax): ";
+    cin >> xMin >> yMin >> xMax >> yMax;
+    
+    int n;
+    cout << "Enter number of points: ";
+    cin >> n;
+    
+    int points[20][2];
+    cout << "Enter points (x y):\n";
+    for (int i = 0; i < n; i++) {
+        cout << "Point " << i + 1 << ": ";
+        cin >> points[i][0] >> points[i][1];
+    }
+    
+    PointClipping(points, n);
+    
+    getch();
+    closegraph();
+    return 0;
+}
+
+
+/*
+
+Enter clipping window (xMin yMin xMax yMax): 100 100 400 300
+Enter number of points: 6
+Enter points (x y):
+Point 1: 250 200    (Inside)
+Point 2: 50 50      (Outside - left and top)
+Point 3: 450 250    (Outside - right)
+Point 4: 150 350    (Outside - bottom)
+Point 5: 300 150    (Inside)
+Point 6: 380 280    (Inside)
+
+*/
